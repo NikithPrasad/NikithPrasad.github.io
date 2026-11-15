@@ -297,14 +297,15 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .work-marker { height: 450px; min-height: 0; }
 #root,#root * { user-select: none; -webkit-user-select: none; }
 .work-visual img.project-image-layer.object-contain { object-fit: contain; background: #090909; }
-.helm-cursor { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 32px; height: 32px; overflow: visible; pointer-events: none; opacity: 0; will-change: transform, filter; fill: none; stroke: #f5c451; stroke-width: 1.05; stroke-linecap: round; stroke-linejoin: round; transition: filter .2s ease, opacity .12s ease; }
+.helm-cursor { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 30px; height: 30px; overflow: visible; pointer-events: none; opacity: 0; will-change: transform, filter; fill: none; stroke: #f5c451; stroke-width: 1.05; stroke-linecap: round; stroke-linejoin: round; transition: filter .2s ease, opacity .12s ease; }
 .helm-cursor[data-visible="true"] { opacity: 1; }
 .helm-cursor[data-hover="true"] { filter: drop-shadow(0 0 3px rgba(245,196,81,.9)) drop-shadow(0 0 7px rgba(245,196,81,.42)); }
-.helm-rim { fill: rgba(10,10,10,.96); stroke-width: 1.25; }
+.helm-rim { fill: #211a10; stroke-width: 1.25; }
 .helm-inner-rim { stroke: rgba(245,196,81,.56); stroke-width: .7; }
-.helm-spokes { stroke-width: 1; }
-.helm-spokes circle { fill: #0a0a0a; stroke: #f5c451; stroke-width: .8; }
-.helm-hub { fill: #f5c451; stroke: #0a0a0a; stroke-width: .7; }
+.helm-spokes { stroke-width: 1.25; }
+.helm-spokes circle { fill: #211a10; stroke: #f5c451; stroke-width: .85; }
+.helm-hub { fill: #e63946; stroke: #f5c451; stroke-width: .75; }
+.helm-hub-pin { fill: #f5c451; stroke: #7f1d1d; stroke-width: .35; }
 @media (pointer: fine) {
   html,body,* { cursor: none !important; }
   .helm-cursor { display: block; }

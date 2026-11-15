@@ -636,13 +636,21 @@ function HelmCursor() {
     let frame = 0
     let visible = false
     let hovering = false
+    let pressed = false
     let x = -24; let y = -24; let targetX = -24; let targetY = -24
     let rotation = 0; let targetRotation = 0; let scale = 1; let targetScale = 1
     const setHover = (next) => {
       if (hovering === next) return
       hovering = next
-      targetScale = hovering ? 1.18 : 1
+      targetScale = pressed ? .9 : hovering ? 1.2 : 1
       cursor.dataset.hover = String(hovering)
+      requestFrame()
+    }
+    const setPressed = (next) => {
+      if (pressed === next) return
+      pressed = next
+      targetScale = pressed ? .9 : hovering ? 1.2 : 1
+      cursor.dataset.pressed = String(pressed)
       requestFrame()
     }
     const requestFrame = () => {
@@ -652,8 +660,8 @@ function HelmCursor() {
       x += (targetX - x) * .28
       y += (targetY - y) * .28
       rotation += (targetRotation - rotation) * .18
-      scale += (targetScale - scale) * .24
-      cursor.style.transform = `translate3d(${x - 16}px, ${y - 16}px, 0) rotate(${rotation}deg) scale(${scale})`
+      scale += (targetScale - scale) * .45
+      cursor.style.transform = `translate3d(${x - 15}px, ${y - 15}px, 0) rotate(${rotation}deg) scale(${scale})`
       if (Math.abs(targetX - x) > .2 || Math.abs(targetY - y) > .2 || Math.abs(targetRotation - rotation) > .1 || Math.abs(targetScale - scale) > .005) {
         frame = window.requestAnimationFrame(tick)
       } else {
@@ -661,7 +669,7 @@ function HelmCursor() {
       }
     }
     const updateRotation = () => {
-      targetRotation = Math.max(-35, Math.min(35, window.scrollY * .004 + (targetX / window.innerWidth - .5) * 10 + (targetY / window.innerHeight - .5) * 4))
+      targetRotation = window.scrollY * .12
       requestFrame()
     }
     const onPointerMove = (event) => {
@@ -675,26 +683,36 @@ function HelmCursor() {
     const onPointerOut = (event) => {
       if (!event.relatedTarget) { visible = false; cursor.dataset.visible = 'false'; setHover(false) }
     }
+    const onMouseDown = () => setPressed(true)
+    const onMouseUp = () => setPressed(false)
     window.addEventListener('pointermove', onPointerMove, { passive: true })
     window.addEventListener('pointerout', onPointerOut)
     window.addEventListener('scroll', updateRotation, { passive: true })
     window.addEventListener('resize', updateRotation, { passive: true })
+    window.addEventListener('mousedown', onMouseDown)
+    window.addEventListener('mouseup', onMouseUp)
+    window.addEventListener('blur', onMouseUp)
+    updateRotation()
     return () => {
       window.cancelAnimationFrame(frame)
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerout', onPointerOut)
       window.removeEventListener('scroll', updateRotation)
       window.removeEventListener('resize', updateRotation)
+      window.removeEventListener('mousedown', onMouseDown)
+      window.removeEventListener('mouseup', onMouseUp)
+      window.removeEventListener('blur', onMouseUp)
     }
   }, [])
-  return <svg ref={cursorRef} className="helm-cursor" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-    <circle className="helm-rim" cx="16" cy="16" r="11.5" />
-    <circle className="helm-inner-rim" cx="16" cy="16" r="7.2" />
+  return <svg ref={cursorRef} className="helm-cursor" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
+    <circle className="helm-rim" cx="15" cy="15" r="11.4" />
+    <circle className="helm-inner-rim" cx="15" cy="15" r="7" />
     <g className="helm-spokes">
-      <path d="M16 4.5V9M16 23v4.5M4.5 16H9M23 16h4.5M7.87 7.87l3.18 3.18M20.95 20.95l3.18 3.18M24.13 7.87l-3.18 3.18M11.05 20.95l-3.18 3.18" />
-      <circle cx="16" cy="4.5" r="1.35" /><circle cx="16" cy="27.5" r="1.35" /><circle cx="4.5" cy="16" r="1.35" /><circle cx="27.5" cy="16" r="1.35" />
+      <path d="M15 3.6V8M15 22v4.4M3.6 15H8M22 15h4.4M6.95 6.95l3.15 3.15M19.9 19.9l3.15 3.15M23.05 6.95 19.9 10.1M10.1 19.9l-3.15 3.15" />
+      <circle cx="15" cy="3.6" r="1.25" /><circle cx="15" cy="26.4" r="1.25" /><circle cx="3.6" cy="15" r="1.25" /><circle cx="26.4" cy="15" r="1.25" />
     </g>
-    <circle className="helm-hub" cx="16" cy="16" r="2.5" />
+    <circle className="helm-hub" cx="15" cy="15" r="2.8" />
+    <circle className="helm-hub-pin" cx="15" cy="15" r=".8" />
   </svg>
 }
 
