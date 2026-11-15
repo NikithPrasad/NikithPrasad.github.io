@@ -295,8 +295,20 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .work-markers { z-index: -1; }
 .work-stage { height: calc(100svh + 2700px); }
 .work-marker { height: 450px; min-height: 0; }
-.work-section,.work-section *,.site-header,.site-header *,.project-modal,.project-modal * { user-select: none; -webkit-user-select: none; }
+#root,#root * { user-select: none; -webkit-user-select: none; }
 .work-visual img.project-image-layer.object-contain { object-fit: contain; background: #090909; }
+.helm-cursor { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 32px; height: 32px; overflow: visible; pointer-events: none; opacity: 0; will-change: transform, filter; fill: none; stroke: #f5c451; stroke-width: 1.05; stroke-linecap: round; stroke-linejoin: round; transition: filter .2s ease, opacity .12s ease; }
+.helm-cursor[data-visible="true"] { opacity: 1; }
+.helm-cursor[data-hover="true"] { filter: drop-shadow(0 0 3px rgba(245,196,81,.9)) drop-shadow(0 0 7px rgba(245,196,81,.42)); }
+.helm-rim { fill: rgba(10,10,10,.96); stroke-width: 1.25; }
+.helm-inner-rim { stroke: rgba(245,196,81,.56); stroke-width: .7; }
+.helm-spokes { stroke-width: 1; }
+.helm-spokes circle { fill: #0a0a0a; stroke: #f5c451; stroke-width: .8; }
+.helm-hub { fill: #f5c451; stroke: #0a0a0a; stroke-width: .7; }
+@media (pointer: fine) {
+  html,body,* { cursor: none !important; }
+  .helm-cursor { display: block; }
+}
 @media (max-width: 980px) and (min-width: 701px) {
   .work-pinned { padding-left: 22px; }
   .work-card { width: 45vw; }

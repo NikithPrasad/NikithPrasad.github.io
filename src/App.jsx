@@ -296,7 +296,7 @@ function WorkSection() {
   }, [])
   useEffect(() => {
     if (!viewport.width) return undefined
-    const zoom = mapZoomed ? 1.35 : 1
+    const zoom = mapZoomed ? 1.25 : 1
     const target = mapZoomed
       ? {
           width: 1600 / zoom,
@@ -627,6 +627,77 @@ function SkillsSection() {
 
 function ContactIcon({ children }) { return <span className="contact-icon-shell"><span className="contact-icon-face">{children}</span></span> }
 
+function HelmCursor() {
+  const cursorRef = useRef(null)
+  useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return undefined
+    const cursor = cursorRef.current
+    if (!cursor) return undefined
+    let frame = 0
+    let visible = false
+    let hovering = false
+    let x = -24; let y = -24; let targetX = -24; let targetY = -24
+    let rotation = 0; let targetRotation = 0; let scale = 1; let targetScale = 1
+    const setHover = (next) => {
+      if (hovering === next) return
+      hovering = next
+      targetScale = hovering ? 1.18 : 1
+      cursor.dataset.hover = String(hovering)
+      requestFrame()
+    }
+    const requestFrame = () => {
+      if (!frame) frame = window.requestAnimationFrame(tick)
+    }
+    const tick = () => {
+      x += (targetX - x) * .28
+      y += (targetY - y) * .28
+      rotation += (targetRotation - rotation) * .18
+      scale += (targetScale - scale) * .24
+      cursor.style.transform = `translate3d(${x - 16}px, ${y - 16}px, 0) rotate(${rotation}deg) scale(${scale})`
+      if (Math.abs(targetX - x) > .2 || Math.abs(targetY - y) > .2 || Math.abs(targetRotation - rotation) > .1 || Math.abs(targetScale - scale) > .005) {
+        frame = window.requestAnimationFrame(tick)
+      } else {
+        frame = 0
+      }
+    }
+    const updateRotation = () => {
+      targetRotation = Math.max(-35, Math.min(35, window.scrollY * .004 + (targetX / window.innerWidth - .5) * 10 + (targetY / window.innerHeight - .5) * 4))
+      requestFrame()
+    }
+    const onPointerMove = (event) => {
+      targetX = event.clientX
+      targetY = event.clientY
+      if (!visible) { x = targetX; y = targetY; visible = true; cursor.dataset.visible = 'true' }
+      updateRotation()
+      const hit = document.elementFromPoint(targetX, targetY)
+      setHover(Boolean(hit?.closest('a,button,[role="button"],summary,input,select,textarea,[tabindex]:not([tabindex="-1"])')))
+    }
+    const onPointerOut = (event) => {
+      if (!event.relatedTarget) { visible = false; cursor.dataset.visible = 'false'; setHover(false) }
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true })
+    window.addEventListener('pointerout', onPointerOut)
+    window.addEventListener('scroll', updateRotation, { passive: true })
+    window.addEventListener('resize', updateRotation, { passive: true })
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerout', onPointerOut)
+      window.removeEventListener('scroll', updateRotation)
+      window.removeEventListener('resize', updateRotation)
+    }
+  }, [])
+  return <svg ref={cursorRef} className="helm-cursor" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <circle className="helm-rim" cx="16" cy="16" r="11.5" />
+    <circle className="helm-inner-rim" cx="16" cy="16" r="7.2" />
+    <g className="helm-spokes">
+      <path d="M16 4.5V9M16 23v4.5M4.5 16H9M23 16h4.5M7.87 7.87l3.18 3.18M20.95 20.95l3.18 3.18M24.13 7.87l-3.18 3.18M11.05 20.95l-3.18 3.18" />
+      <circle cx="16" cy="4.5" r="1.35" /><circle cx="16" cy="27.5" r="1.35" /><circle cx="4.5" cy="16" r="1.35" /><circle cx="27.5" cy="16" r="1.35" />
+    </g>
+    <circle className="helm-hub" cx="16" cy="16" r="2.5" />
+  </svg>
+}
+
 function ContactSection() {
   const [copied, setCopied] = useState(false)
   const copyEmail = async () => {
@@ -663,6 +734,7 @@ export default function App() {
     }
   }, [])
   return <>
+    <HelmCursor />
     <a className="skip-link" href="#main">Skip to content</a>
     <Header />
     <main id="main">
