@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ArrowDown, ArrowDownRight, ArrowRight, ArrowUpRight, BrainCircuit,
   BriefcaseBusiness, Check, Code2, Database,
@@ -72,15 +72,13 @@ const projects = [
   },
 ]
 
-const mapBearing = (x, y) => (Math.round((Math.atan2((x - 50) * 16, (50 - y) * 9) * 180) / Math.PI) + 360) % 360
-
 const chartStops = [
-  { x: 46, y: 52, island: 'Sabaody Archipelago', region: 'GRAND LINE · SABAODY', labelX: 43, labelY: 55, anchor: 'end', size: 1.22 },
-  { x: 31, y: 73, island: 'Ohara', region: 'WEST BLUE · OHARA', labelX: 34, labelY: 70, anchor: 'start', size: 1.08 },
-  { x: 31, y: 48, island: 'Water 7', region: 'GRAND LINE · PARADISE', labelX: 28, labelY: 45, anchor: 'end', size: 1.13 },
-  { x: 41, y: 37, island: 'Drum Island', region: 'GRAND LINE · PARADISE', labelX: 39, labelY: 34, anchor: 'end', size: 1.03 },
-  { x: 81, y: 51, island: 'Egghead', region: 'GRAND LINE · NEW WORLD', labelX: 77, labelY: 48, anchor: 'end', size: 1.18 },
-  { x: 31, y: 60, island: 'Alabasta', region: 'GRAND LINE · PARADISE', labelX: 34, labelY: 63, anchor: 'start', size: 1.28 },
+  { x: 46, y: 52, island: 'Sabaody Archipelago', region: 'GRAND LINE · SABAODY', labelX: 43, labelY: 55, anchor: 'end', bearing: 72, size: 1.22 },
+  { x: 15, y: 73, island: 'Ohara', region: 'WEST BLUE · OHARA', labelX: 18, labelY: 70, anchor: 'start', bearing: 118, size: 1.08 },
+  { x: 31, y: 48, island: 'Water 7', region: 'GRAND LINE · PARADISE', labelX: 28, labelY: 45, anchor: 'end', bearing: 164, size: 1.13 },
+  { x: 41, y: 37, island: 'Drum Island', region: 'GRAND LINE · PARADISE', labelX: 39, labelY: 34, anchor: 'end', bearing: 211, size: 1.03 },
+  { x: 81, y: 51, island: 'Egghead', region: 'GRAND LINE · NEW WORLD', labelX: 77, labelY: 48, anchor: 'end', bearing: 253, size: 1.18 },
+  { x: 31, y: 60, island: 'Alabasta', region: 'GRAND LINE · PARADISE', labelX: 34, labelY: 63, anchor: 'start', bearing: 302, size: 1.28 },
 ]
 
 const unchartedStops = [
@@ -263,7 +261,6 @@ function WorkSection() {
   const [mapZoomed, setMapZoomed] = useState(true)
   const [selected, setSelected] = useState(null)
   const [viewport, setViewport] = useState({ width: 0, height: 0 })
-  const [cameraViewBox, setCameraViewBox] = useState({ x: 0, y: 0, width: 1600, height: 900 })
   const [decodeLabel, setDecodeLabel] = useState('DECIPHERING RIO PONEGLYPH 01...')
   const markers = useRef([])
   const stageRef = useRef(null)
@@ -271,10 +268,14 @@ function WorkSection() {
   const navigationTarget = useRef(null)
   const navigationTimer = useRef(0)
   const decodeRun = useRef(0)
-  const cameraRef = useRef({ x: 0, y: 0, width: 1600, height: 900 })
   const active = projects[activeIndex]
   const stop = chartStops[activeIndex]
-  const bearing = mapBearing(stop.x, stop.y)
+  const mapScale = mapZoomed ? 1.48 : 1
+  const mapFocusX = .72
+  const mapFocusY = viewport.width < 700 ? .2 : .5
+  const mapX = mapZoomed && viewport.width ? viewport.width * mapFocusX - (stop.x / 100) * viewport.width * mapScale : 0
+  const mapY = mapZoomed && viewport.height ? viewport.height * mapFocusY - (stop.y / 100) * viewport.height * mapScale : 0
+  const mapTransform = `translate3d(${mapX}px, ${mapY}px, 0) scale(${mapScale})`
   useEffect(() => {
     const preloaded = projects.map((project) => {
       const image = new Image()
@@ -294,41 +295,6 @@ function WorkSection() {
     observer.observe(element)
     return () => observer.disconnect()
   }, [])
-  useEffect(() => {
-    if (!viewport.width) return undefined
-    const zoom = mapZoomed ? 1.25 : 1
-    const target = mapZoomed
-      ? {
-          width: 1600 / zoom,
-          height: 900 / zoom,
-          x: stop.x * 16 - (1600 / zoom) * .7,
-          y: stop.y * 9 - (900 / zoom) * .5,
-        }
-      : { x: 0, y: 0, width: 1600, height: 900 }
-    const from = cameraRef.current
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      cameraRef.current = target
-      setCameraViewBox(target)
-      return undefined
-    }
-    const startAt = performance.now()
-    let frame = 0
-    const animate = (now) => {
-      const progress = Math.min((now - startAt) / 480, 1)
-      const eased = 1 - (1 - progress) ** 3
-      const current = {
-        x: from.x + (target.x - from.x) * eased,
-        y: from.y + (target.y - from.y) * eased,
-        width: from.width + (target.width - from.width) * eased,
-        height: from.height + (target.height - from.height) * eased,
-      }
-      cameraRef.current = current
-      setCameraViewBox(current)
-      if (progress < 1) frame = window.requestAnimationFrame(animate)
-    }
-    frame = window.requestAnimationFrame(animate)
-    return () => window.cancelAnimationFrame(frame)
-  }, [activeIndex, mapZoomed, stop, viewport.width])
   useEffect(() => {
     const target = active.name.toUpperCase()
     const run = decodeRun.current + 1
@@ -396,22 +362,18 @@ function WorkSection() {
     <div className="work-stage" ref={stageRef}>
       <div className="work-pinned" ref={pinnedRef}>
         <div className="sea-chart-layer" aria-hidden="true">
-          <div className="sea-chart-pan">
-            <svg className={`sea-chart-svg ${mapZoomed ? 'map-zoomed' : 'map-full'}`} viewBox={`${cameraViewBox.x} ${cameraViewBox.y} ${cameraViewBox.width} ${cameraViewBox.height}`} preserveAspectRatio="none" shapeRendering="geometricPrecision" aria-hidden="true">
+          <div className="sea-chart-pan" style={{ transform: mapTransform }}>
+            <svg className={`sea-chart-svg ${mapZoomed ? 'map-zoomed' : 'map-full'}`} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
               <defs>
-                <linearGradient id="ocean-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#050a14" /><stop offset="1" stopColor="#0a1628" /></linearGradient>
-                <pattern id="chart-grid" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M 5 0 L 0 0 0 5" fill="none" stroke="#1e293b" strokeOpacity=".62" strokeWidth=".07" /></pattern>
-                <pattern id="redline-strata" width="2.5" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(22)"><path d="M 0 0 H 2.5" fill="none" stroke="#e63946" strokeOpacity=".24" strokeWidth=".11" /></pattern>
-                <linearGradient id="red-line-fill" x1="0" x2="1"><stop offset="0" stopColor="#5b171d" /><stop offset=".5" stopColor="#7f1d1d" /><stop offset="1" stopColor="#5a171e" /></linearGradient>
-                <radialGradient id="chart-vignette"><stop offset="0" stopColor="#050a14" stopOpacity=".02" /><stop offset="1" stopColor="#050a14" stopOpacity=".6" /></radialGradient>
+                <pattern id="chart-grid" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M 5 0 L 0 0 0 5" fill="none" stroke="rgba(169,184,203,.1)" strokeWidth=".07" /></pattern>
+                <linearGradient id="red-line-fill" x1="0" x2="1"><stop offset="0" stopColor="#391119" /><stop offset=".5" stopColor="#681b27" /><stop offset="1" stopColor="#351018" /></linearGradient>
+                <radialGradient id="chart-vignette"><stop offset="0" stopColor="#07090d" stopOpacity=".02" /><stop offset="1" stopColor="#07090d" stopOpacity=".7" /></radialGradient>
               </defs>
-              <g transform="scale(16 9)">
-              <rect width="100" height="100" fill="url(#ocean-fill)" />
+              <rect width="100" height="100" fill="#07090d" />
               <rect width="100" height="100" fill="url(#chart-grid)" />
               <rect width="100" height="100" fill="url(#chart-vignette)" />
               {[10, 30, 50, 70, 90].map((tick) => <g className="chart-tick" key={tick}><path d={`M ${tick} 0 v 1.2 M 0 ${tick} h 1.2`} /><text x={tick - 1.5} y="2.8">{String(tick).padStart(2, '0')}</text><text x="1.7" y={tick + .4}>{String(tick).padStart(2, '0')}</text></g>)}
               <path className="chart-redline-land" d="M 50 -3 C 54 7 49 17 52 27 C 55 38 49 43 52 50 C 55 59 50 66 53 77 C 56 88 50 95 53 103 L 56 103 C 53 92 59 84 56 75 C 53 65 59 58 56 49 C 53 40 59 33 56 25 C 53 15 59 7 55 -3 Z" />
-              <path className="chart-redline-texture" d="M 50 -3 C 54 7 49 17 52 27 C 55 38 49 43 52 50 C 55 59 50 66 53 77 C 56 88 50 95 53 103 L 56 103 C 53 92 59 84 56 75 C 53 65 59 58 56 49 C 53 40 59 33 56 25 C 53 15 59 7 55 -3 Z" />
               <path className="chart-redline-ridge" d="M 52 -2 C 56 8 51 17 54 27 S 51 42 54 50 S 51 65 55 77 S 52 92 54 102" />
               <path className="chart-calm-belt" d="M 3 42.5 C 24 42.3 39 42.7 51 42.5 S 78 42.3 97 42.5 M 3 57.5 C 24 57.7 39 57.3 51 57.5 S 78 57.7 97 57.5" />
               <path className="chart-grand-line" d={grandLinePath} />
@@ -423,7 +385,7 @@ function WorkSection() {
               <text className="chart-blue-label" x="10" y="86">WEST BLUE</text>
               <text className="chart-blue-label" x="77" y="86">SOUTH BLUE</text>
               <text className="chart-grand-label" x="20" y="49">PARADISE</text>
-              <text className="chart-grand-label" x="72" y="45">NEW WORLD</text>
+              <text className="chart-grand-label" x="72" y="49">NEW WORLD</text>
               <g className="map-landmark reverse-mountain" transform="translate(53 42.5)">
                 <path d="M -1.35 .7 L -.45 -.65 L .05 .15 L .65 -1.05 L 1.45 .7 Z" />
                 <text x="1.8" y="-.5">REVERSE MOUNTAIN</text>
@@ -474,16 +436,13 @@ function WorkSection() {
                 <text className="uncharted-title" x={place.labelX} y={place.labelY} textAnchor={place.anchor}>VOID CENTURY // UNCHARTED</text>
                 <text className="uncharted-island-name" x={place.labelX} y={place.labelY + 1.1} textAnchor={place.anchor}>{place.island}</text>
               </g>)}
-              </g>
             </svg>
           </div>
         </div>
-        <div className="chart-hotspots" role="group" aria-label="Select a Poneglyph on the sea chart">
+        <div className="chart-hotspots" style={{ transform: mapTransform }} role="group" aria-label="Select a Poneglyph on the sea chart">
           {projects.map((project, index) => {
             const point = chartStops[index]
-            const left = (point.x * 16 - cameraViewBox.x) / cameraViewBox.width * 100
-            const top = (point.y * 9 - cameraViewBox.y) / cameraViewBox.height * 100
-            return <button key={project.id} type="button" className={`chart-hotspot ${index === activeIndex ? 'is-active' : ''}`} style={{ left: `${left}%`, top: `${top}%`, '--beacon-color': project.color }} aria-label={`Zoom to ${project.number}, ${project.name}`} aria-current={index === activeIndex ? 'location' : undefined} onClick={() => goTo(index)} onKeyDown={(event) => handleBeaconKey(event, index)}>
+            return <button key={project.id} type="button" className={`chart-hotspot ${index === activeIndex ? 'is-active' : ''}`} style={{ left: `${point.x}%`, top: `${point.y}%`, '--beacon-color': project.color }} aria-label={`Zoom to ${project.number}, ${project.name}`} aria-current={index === activeIndex ? 'location' : undefined} onClick={() => goTo(index)} onKeyDown={(event) => handleBeaconKey(event, index)}>
               <span className="chart-hotspot-dot" /><span className="chart-hotspot-tooltip" data-edge={point.x > 76 ? 'left' : 'right'}>{project.number} // {project.name.toUpperCase()} · {point.island.toUpperCase()}</span>
             </button>
           })}
@@ -491,14 +450,14 @@ function WorkSection() {
         <div className="chart-ui">
           <button type="button" className="full-map-button" aria-pressed={!mapZoomed} aria-label={mapZoomed ? 'Show full sea chart' : 'Return to selected location'} onClick={() => setMapZoomed(!mapZoomed)}>{mapZoomed ? 'FULL MAP' : 'RETURN TO LOCATION'} <span>↗</span></button>
           <div className="chart-jumpbar" aria-label="Jump to a Poneglyph">{projects.map((project, index) => <button key={project.id} type="button" className={index === activeIndex ? 'is-active' : ''} style={{ '--beacon-color': project.color }} aria-label={`Jump to ${project.name}`} aria-current={index === activeIndex ? 'step' : undefined} onClick={() => goTo(index)}>{project.number}</button>)}</div>
-          <div className="chart-bearing" aria-label={`Log Pose bearing from chart center to ${stop.island}: ${bearing} degrees`}><span>LOG POSE</span><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="39" /><path className="bearing-needle" style={{ transform: `rotate(${bearing}deg)` }} d="M50 14 L56 56 L50 50 L44 56 Z" /><circle cx="50" cy="50" r="4" /></svg><b>{String(bearing).padStart(3, '0')}°</b></div>
+          <div className="chart-bearing" aria-label={`Log Pose bearing ${stop.bearing} degrees`}><span>LOG POSE</span><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" /><path className="bearing-needle" style={{ transform: `rotate(${stop.bearing}deg)` }} d="M16 5 L19 17 L16 15 L13 17 Z" /><circle cx="16" cy="16" r="1.5" /></svg><b>{String(stop.bearing).padStart(3, '0')}°</b></div>
         </div>
         {mapZoomed && <>
         <div className="work-index" aria-hidden="true">{active.number}</div>
         <div className="work-card" key={active.id} style={{ '--project-accent': active.color, '--arrival-x': activeIndex % 2 ? '-12px' : '12px' }}>
           <div className="work-card-top"><span>{active.number} <i /> DECIPHERED COORDINATE</span><a href={active.repo} target="_blank" rel="noreferrer" aria-label={`Open ${active.name} on GitHub`}><ArrowUpRight size={18} /></a></div>
           <div className="work-card-body">
-            <div className="work-visual">{projects.map((project, index) => <img className={`project-image-layer ${project.id === 'commerceflow' ? 'object-contain' : ''} ${index === activeIndex ? 'is-active' : ''}`} key={project.id} src={project.image} alt={index === activeIndex ? project.imageAlt : ''} aria-hidden={index !== activeIndex} loading="eager" decoding="async" />)}<div className="visual-overlay" /><span className="visual-coordinate">FIG. {active.number} — FIELD RECORD</span></div>
+            <div className="work-visual">{projects.map((project, index) => <img className={`project-image-layer ${index === activeIndex ? 'is-active' : ''}`} key={project.id} src={project.image} alt={index === activeIndex ? project.imageAlt : ''} aria-hidden={index !== activeIndex} loading="eager" decoding="async" />)}<div className="visual-overlay" /><span className="visual-coordinate">FIG. {active.number} — FIELD RECORD</span></div>
             <div className="work-content" key={active.id} style={{ '--copy-shift': activeIndex % 2 ? '-10px' : '10px' }}><span className="project-type" aria-live="polite">{decodeLabel}</span><h3>{active.name}<span>.</span></h3><p className="work-summary">{active.summary}</p>
               <div className="work-metrics">{active.metrics.slice(0, 3).map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div>
               <div className="work-card-bottom"><button className="details-button" onClick={() => setSelected(active)}>Details <ArrowUpRight size={14} /></button><span className="work-stack">{active.stack.slice(0, 3).join(' · ')}</span></div>
@@ -627,95 +586,6 @@ function SkillsSection() {
 
 function ContactIcon({ children }) { return <span className="contact-icon-shell"><span className="contact-icon-face">{children}</span></span> }
 
-function HelmCursor() {
-  const cursorRef = useRef(null)
-  useEffect(() => {
-    if (!window.matchMedia('(pointer: fine)').matches) return undefined
-    const cursor = cursorRef.current
-    if (!cursor) return undefined
-    let frame = 0
-    let visible = false
-    let hovering = false
-    let pressed = false
-    let x = -24; let y = -24; let targetX = -24; let targetY = -24
-    let rotation = 0; let targetRotation = 0; let scale = 1; let targetScale = 1
-    const setHover = (next) => {
-      if (hovering === next) return
-      hovering = next
-      targetScale = pressed ? .9 : hovering ? 1.2 : 1
-      cursor.dataset.hover = String(hovering)
-      requestFrame()
-    }
-    const setPressed = (next) => {
-      if (pressed === next) return
-      pressed = next
-      targetScale = pressed ? .9 : hovering ? 1.2 : 1
-      cursor.dataset.pressed = String(pressed)
-      requestFrame()
-    }
-    const requestFrame = () => {
-      if (!frame) frame = window.requestAnimationFrame(tick)
-    }
-    const tick = () => {
-      x += (targetX - x) * .28
-      y += (targetY - y) * .28
-      rotation += (targetRotation - rotation) * .18
-      scale += (targetScale - scale) * .45
-      cursor.style.transform = `translate3d(${x - 15}px, ${y - 15}px, 0) rotate(${rotation}deg) scale(${scale})`
-      if (Math.abs(targetX - x) > .2 || Math.abs(targetY - y) > .2 || Math.abs(targetRotation - rotation) > .1 || Math.abs(targetScale - scale) > .005) {
-        frame = window.requestAnimationFrame(tick)
-      } else {
-        frame = 0
-      }
-    }
-    const updateRotation = () => {
-      targetRotation = window.scrollY * .12
-      requestFrame()
-    }
-    const onPointerMove = (event) => {
-      targetX = event.clientX
-      targetY = event.clientY
-      if (!visible) { x = targetX; y = targetY; visible = true; cursor.dataset.visible = 'true' }
-      updateRotation()
-      const hit = document.elementFromPoint(targetX, targetY)
-      setHover(Boolean(hit?.closest('a,button,[role="button"],summary,input,select,textarea,[tabindex]:not([tabindex="-1"])')))
-    }
-    const onPointerOut = (event) => {
-      if (!event.relatedTarget) { visible = false; cursor.dataset.visible = 'false'; setHover(false) }
-    }
-    const onMouseDown = () => setPressed(true)
-    const onMouseUp = () => setPressed(false)
-    window.addEventListener('pointermove', onPointerMove, { passive: true })
-    window.addEventListener('pointerout', onPointerOut)
-    window.addEventListener('scroll', updateRotation, { passive: true })
-    window.addEventListener('resize', updateRotation, { passive: true })
-    window.addEventListener('mousedown', onMouseDown)
-    window.addEventListener('mouseup', onMouseUp)
-    window.addEventListener('blur', onMouseUp)
-    updateRotation()
-    return () => {
-      window.cancelAnimationFrame(frame)
-      window.removeEventListener('pointermove', onPointerMove)
-      window.removeEventListener('pointerout', onPointerOut)
-      window.removeEventListener('scroll', updateRotation)
-      window.removeEventListener('resize', updateRotation)
-      window.removeEventListener('mousedown', onMouseDown)
-      window.removeEventListener('mouseup', onMouseUp)
-      window.removeEventListener('blur', onMouseUp)
-    }
-  }, [])
-  return <svg ref={cursorRef} className="helm-cursor" viewBox="0 0 30 30" aria-hidden="true" focusable="false">
-    <circle className="helm-rim" cx="15" cy="15" r="11.4" />
-    <circle className="helm-inner-rim" cx="15" cy="15" r="7" />
-    <g className="helm-spokes">
-      <path d="M15 3.6V8M15 22v4.4M3.6 15H8M22 15h4.4M6.95 6.95l3.15 3.15M19.9 19.9l3.15 3.15M23.05 6.95 19.9 10.1M10.1 19.9l-3.15 3.15" />
-      <circle cx="15" cy="3.6" r="1.25" /><circle cx="15" cy="26.4" r="1.25" /><circle cx="3.6" cy="15" r="1.25" /><circle cx="26.4" cy="15" r="1.25" />
-    </g>
-    <circle className="helm-hub" cx="15" cy="15" r="2.8" />
-    <circle className="helm-hub-pin" cx="15" cy="15" r=".8" />
-  </svg>
-}
-
 function ContactSection() {
   const [copied, setCopied] = useState(false)
   const copyEmail = async () => {
@@ -736,23 +606,7 @@ function ContactSection() {
 }
 
 export default function App() {
-  useLayoutEffect(() => {
-    if (window.location.hash !== '#top') return undefined
-    const previousRestoration = window.history.scrollRestoration
-    window.history.scrollRestoration = 'manual'
-    const forceTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-    forceTop()
-    let frame = window.requestAnimationFrame(() => {
-      forceTop()
-      frame = window.requestAnimationFrame(forceTop)
-    })
-    return () => {
-      window.cancelAnimationFrame(frame)
-      window.history.scrollRestoration = previousRestoration
-    }
-  }, [])
   return <>
-    <HelmCursor />
     <a className="skip-link" href="#main">Skip to content</a>
     <Header />
     <main id="main">

@@ -171,13 +171,13 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .ocean-canvas { position: sticky; z-index: 0; top: 0; height: 100svh; margin-bottom: -100svh; pointer-events: none; }
 .experience-content { z-index: 1; }
 .sea-chart-layer { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
-.sea-chart-pan { position: absolute; inset: 0; width: 100%; height: 100%; }
-.sea-chart-svg { display: block; width: 100%; height: 100%; overflow: hidden; shape-rendering: geometricPrecision; }
+.sea-chart-pan { position: absolute; inset: 0; width: 100%; height: 100%; transform-origin: 0 0; transition: transform .78s cubic-bezier(.2,.72,.18,1); will-change: transform; }
+.sea-chart-svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .chart-contour { fill: none; vector-effect: non-scaling-stroke; }
 .chart-tick { fill: rgba(189,186,176,.3); stroke: rgba(189,186,176,.2); stroke-width: .1; font: .56px var(--mono); }
 .chart-heading-label,.chart-coordinate-label { fill: rgba(226,221,208,.27); font: .72px var(--mono); letter-spacing: .1px; }
 .chart-coordinate-label { fill: rgba(226,221,208,.2); }
-.chart-hotspots { position: absolute; z-index: 20; inset: 0; pointer-events: none; }
+.chart-hotspots { position: absolute; z-index: 20; inset: 0; transform-origin: 0 0; transition: transform .78s cubic-bezier(.2,.72,.18,1); will-change: transform; pointer-events: none; }
 .chart-hotspot { position: absolute; display: block; width: 30px; height: 30px; transform: translate(-50%,-50%); border: 0; border-radius: 50%; padding: 0; background: transparent; color: var(--beacon-color); cursor: pointer; pointer-events: auto; }
 .chart-hotspot::before { content: ''; position: absolute; inset: 4px; border: 1px solid color-mix(in srgb, var(--beacon-color) 72%, transparent); border-radius: 50%; opacity: 0; transform: scale(.42); }
 .chart-hotspot.is-active::before { animation: sonar-pulse 2.4s ease-out infinite; }
@@ -199,7 +199,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .chart-jumpbar button:hover,.chart-jumpbar button.is-active { border-color: color-mix(in srgb, var(--beacon-color) 50%, transparent); background: color-mix(in srgb, var(--beacon-color) 9%, transparent); color: var(--beacon-color); }
 .chart-bearing { display: flex; align-items: center; gap: 8px; color: #5e5c56; font: 7px var(--mono); letter-spacing: .1em; }
 .chart-bearing svg { width: 26px; height: 26px; fill: none; stroke: rgba(245,196,81,.5); stroke-width: 1; }
-.chart-bearing .bearing-needle { fill: var(--gold); stroke: none; transform-box: view-box; transform-origin: 50px 50px; transition: transform .48s cubic-bezier(.2,.72,.18,1); }
+.chart-bearing .bearing-needle { fill: var(--gold); stroke: none; transform-box: fill-box; transform-origin: center; transition: transform .6s cubic-bezier(.2,.72,.18,1); }
 .chart-bearing b { color: #77746b; font-size: 7px; font-weight: 400; }
 .work-card { z-index: 10; }
 .work-card { animation: chart-card-arrive .48s cubic-bezier(.2,.72,.18,1) both; }
@@ -213,10 +213,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .education-list .education-detail h3 { max-width: 100%; }
 @media (max-width: 700px) {
   .chart-ui { top: auto; right: 50%; bottom: 50px; transform: translateX(50%); display: flex; align-items: center; gap: 7px; }
-  .chart-bearing { display: flex; gap: 4px; }
-  .chart-bearing>span { display: none; }
-  .chart-bearing svg { width: 22px; height: 22px; }
-  .chart-bearing b { font-size: 6px; }
+  .chart-bearing { display: none; }
   .chart-jumpbar { gap: 1px; padding: 3px; }
   .chart-jumpbar button { width: 22px; height: 22px; }
   .full-map-button { padding: 7px 8px; font-size: 7px; white-space: nowrap; }
@@ -226,7 +223,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
   .education-list .education-detail p { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .chart-bearing .bearing-needle { transition-duration: .01ms; }
+  .sea-chart-pan,.chart-hotspots,.chart-bearing .bearing-needle { transition-duration: .01ms; }
   .chart-hotspot.is-active::before,.chart-hotspot-dot { animation-duration: .01ms; }
 }
 @media (max-width: 700px) {
@@ -237,15 +234,13 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 }
 
 /* One Piece world chart and docked project view */
-.work-pinned { justify-content: flex-start; padding-left: clamp(22px, calc((100vw - 1320px) / 2), 100px); background: linear-gradient(135deg, #050a14, #0a1628); }
+.work-pinned { justify-content: flex-start; padding-left: clamp(22px, calc((100vw - 1320px) / 2), 100px); }
 .work-pinned::before { z-index: 1; background: radial-gradient(ellipse at 72% 50%, rgba(56,189,248,.045), transparent 45%); }
-.work-pinned::after { content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none; background: linear-gradient(to bottom, #0a0a0a 0%, rgba(10,10,10,.88) 4%, rgba(10,10,10,.4) 8%, rgba(10,10,10,0) 12%, rgba(10,10,10,0) 82%, rgba(10,10,10,.34) 88%, rgba(10,10,10,.76) 94%, #0a0a0a 100%); }
-.sea-chart-layer { z-index: 0; background: linear-gradient(135deg, #050a14, #0a1628); }
+.sea-chart-layer { z-index: 0; background: #07090d; }
 .sea-chart-pan { z-index: 0; }
 .sea-chart-svg { overflow: hidden; }
-.chart-redline-land { fill: url(#red-line-fill); stroke: #e63946; stroke-opacity: .72; stroke-width: .3; vector-effect: non-scaling-stroke; }
-.chart-redline-texture { fill: url(#redline-strata); opacity: .8; }
-.chart-redline-ridge { fill: none; stroke: #e63946; stroke-opacity: .75; stroke-width: .22; stroke-dasharray: .55 .45; vector-effect: non-scaling-stroke; }
+.chart-redline-land { fill: url(#red-line-fill); stroke: rgba(230,57,70,.48); stroke-width: .24; vector-effect: non-scaling-stroke; }
+.chart-redline-ridge { fill: none; stroke: rgba(255,137,141,.32); stroke-width: .22; stroke-dasharray: .55 .45; vector-effect: non-scaling-stroke; }
 .chart-calm-belt { fill: none; stroke: rgba(56,189,248,.25); stroke-width: .18; stroke-dasharray: .7 .48; vector-effect: non-scaling-stroke; }
 .chart-grand-line { fill: none; stroke: rgba(245,196,81,.42); stroke-width: .24; vector-effect: non-scaling-stroke; }
 .chart-grand-line-core { fill: none; stroke: rgba(56,189,248,.48); stroke-width: .1; stroke-dasharray: .26 .44; vector-effect: non-scaling-stroke; }
@@ -256,7 +251,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .map-landmark path { fill: #e63946; stroke: rgba(255,178,179,.68); stroke-width: .15; vector-effect: non-scaling-stroke; }
 .map-landmark text { fill: rgba(241,223,218,.76); font: .56px var(--mono); letter-spacing: .08px; }
 .chart-island { color: var(--beacon-color); }
-.chart-island .island-silhouette,.chart-island .archipelago-shapes path { fill: #131f33; stroke: color-mix(in srgb, var(--beacon-color) 78%, #38bdf8); stroke-width: .22; vector-effect: non-scaling-stroke; }
+.chart-island .island-silhouette,.chart-island .archipelago-shapes path { fill: #14222b; stroke: color-mix(in srgb, var(--beacon-color) 72%, #60717b); stroke-width: .17; vector-effect: non-scaling-stroke; }
 .chart-island .island-topography { fill: none; stroke: rgba(155,188,192,.42); stroke-width: .15; vector-effect: non-scaling-stroke; }
 .chart-island .island-topography.inner { stroke: color-mix(in srgb, var(--beacon-color) 48%, transparent); opacity: .8; }
 .chart-island .poneglyph-mark { fill: var(--beacon-color); stroke: #07090d; stroke-width: .13; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 1.2px var(--beacon-color)); }
@@ -271,7 +266,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .map-zoomed .chart-uncharted { opacity: 0; }
 .map-zoomed .chart-blue-label,.map-zoomed .chart-grand-label,.map-zoomed .chart-calm-label,.map-zoomed .map-landmark,.map-zoomed .chart-heading-label,.map-zoomed .chart-coordinate-label { display: none; }
 .chart-uncharted { opacity: .25; }
-.uncharted-island-shape { fill: #131f33; stroke: rgba(56,189,248,.42); stroke-width: .2; vector-effect: non-scaling-stroke; }
+.uncharted-island-shape { fill: #20232a; stroke: rgba(160,164,172,.44); stroke-width: .16; vector-effect: non-scaling-stroke; }
 .uncharted-contour { fill: none; stroke: rgba(174,179,185,.28); stroke-width: .13; vector-effect: non-scaling-stroke; }
 .uncharted-mark { fill: #9a9ca2; opacity: .55; }
 .chart-uncharted>path { fill: none; stroke: rgba(192,192,193,.28); stroke-width: .12; stroke-dasharray: .36 .32; vector-effect: non-scaling-stroke; }
@@ -294,23 +289,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .map-full .map-full-label { opacity: 1; }
 .map-zoomed .map-full-label { opacity: 0; }
 .work-markers { z-index: -1; }
-.work-stage { height: calc(100svh + 2700px); }
-.work-marker { height: 450px; min-height: 0; }
-#root,#root * { user-select: none; -webkit-user-select: none; }
-.work-visual img.project-image-layer.object-contain { object-fit: contain; background: #090909; }
-.helm-cursor { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 30px; height: 30px; overflow: visible; pointer-events: none; opacity: 0; will-change: transform, filter; fill: none; stroke: #f5c451; stroke-width: 1.05; stroke-linecap: round; stroke-linejoin: round; transition: filter .2s ease, opacity .12s ease; }
-.helm-cursor[data-visible="true"] { opacity: 1; }
-.helm-cursor[data-hover="true"] { filter: drop-shadow(0 0 3px rgba(245,196,81,.9)) drop-shadow(0 0 7px rgba(245,196,81,.42)); }
-.helm-rim { fill: #211a10; stroke-width: 1.25; }
-.helm-inner-rim { stroke: rgba(245,196,81,.56); stroke-width: .7; }
-.helm-spokes { stroke-width: 1.25; }
-.helm-spokes circle { fill: #211a10; stroke: #f5c451; stroke-width: .85; }
-.helm-hub { fill: #e63946; stroke: #f5c451; stroke-width: .75; }
-.helm-hub-pin { fill: #f5c451; stroke: #7f1d1d; stroke-width: .35; }
-@media (pointer: fine) {
-  html,body,* { cursor: none !important; }
-  .helm-cursor { display: block; }
-}
 @media (max-width: 980px) and (min-width: 701px) {
   .work-pinned { padding-left: 22px; }
   .work-card { width: 45vw; }
@@ -322,17 +300,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 }
 @media (max-width: 700px) {
   .work-pinned { padding: 0; align-items: stretch; }
-  .work-pinned::after { background: linear-gradient(to bottom, #0a0a0a 0px, #0a0a0a 76px, rgba(10,10,10,0) calc(76px + 6.75vw), rgba(10,10,10,0) calc(76px + 46.125vw), #0a0a0a calc(76px + 56.25vw), #0a0a0a 100%); }
-  .sea-chart-layer,.chart-hotspots { top: 76px; right: 0; bottom: auto; left: 0; height: 56.25vw; }
-  .sea-chart-svg { width: 100%; height: 100%; }
   .work-card { position: absolute; left: 16px; right: 16px; bottom: 61px; width: auto; max-width: none; max-height: calc(100svh - 170px); overflow-y: auto; }
   .work-card-body { grid-template-columns: 1fr; }
   .work-index { left: auto; right: 2%; top: 12%; bottom: auto; font-size: 38vw; }
   .chart-ui { top: auto; right: 50%; bottom: 13px; transform: translateX(50%); }
-  .chart-bearing { display: flex; gap: 4px; }
-  .chart-bearing>span { display: none; }
-  .chart-bearing svg { width: 22px; height: 22px; }
-  .chart-bearing b { font-size: 6px; }
+  .chart-bearing { display: none; }
   .chart-jumpbar { gap: 1px; padding: 3px; }
   .chart-jumpbar button { width: 22px; height: 22px; }
   .chart-hotspot-tooltip { display: none; }
