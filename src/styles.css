@@ -166,12 +166,76 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .work-content { animation: project-copy-in .34s ease both; }
 @keyframes project-copy-in { from { opacity: .65; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 .modal-backdrop { z-index: 50; }
-.experience-section { min-height: 100svh; overflow: clip; }
+.experience-section { min-height: auto; overflow: clip; }
+.experience-content { padding-top: 84px; padding-bottom: 58px; }
 .ocean-canvas { position: sticky; z-index: 0; top: 0; height: 100svh; margin-bottom: -100svh; pointer-events: none; }
 .experience-content { z-index: 1; }
+.sea-chart-layer { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+.sea-chart-pan { position: absolute; inset: 0; width: 100%; height: 100%; transform-origin: 0 0; transition: transform .78s cubic-bezier(.2,.72,.18,1); will-change: transform; }
+.sea-chart-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.chart-contour { fill: none; vector-effect: non-scaling-stroke; }
+.chart-red-line { stroke: rgba(230,57,70,.24); stroke-width: 1.15px; stroke-dasharray: 3 7; }
+.chart-grand-line { stroke: rgba(245,196,81,.2); stroke-width: 1.2px; }
+.chart-sea-route { fill: none; stroke: rgba(56,189,248,.4); stroke-width: .75px; stroke-dasharray: .42 .48; vector-effect: non-scaling-stroke; }
+.chart-island ellipse { fill: none; stroke: color-mix(in srgb, var(--beacon-color) 25%, transparent); stroke-width: .7px; vector-effect: non-scaling-stroke; }
+.chart-island circle { fill: var(--beacon-color); opacity: .5; }
+.chart-next-beacon { fill: rgba(215,211,201,.2); font: .62px var(--mono); letter-spacing: .1px; }
+.chart-next-beacon circle { fill: #aaa69a; opacity: .5; }
+.chart-tick { fill: rgba(189,186,176,.3); stroke: rgba(189,186,176,.2); stroke-width: .1; font: .56px var(--mono); }
+.chart-heading-label,.chart-coordinate-label { fill: rgba(226,221,208,.27); font: .72px var(--mono); letter-spacing: .1px; }
+.chart-coordinate-label { fill: rgba(226,221,208,.2); }
+.chart-hotspots { position: absolute; z-index: 20; inset: 0; transform-origin: 0 0; transition: transform .78s cubic-bezier(.2,.72,.18,1); will-change: transform; pointer-events: none; }
+.chart-hotspot { position: absolute; display: block; width: 30px; height: 30px; transform: translate(-50%,-50%); border: 0; border-radius: 50%; padding: 0; background: transparent; color: var(--beacon-color); cursor: pointer; pointer-events: auto; }
+.chart-hotspot::before { content: ''; position: absolute; inset: 4px; border: 1px solid color-mix(in srgb, var(--beacon-color) 72%, transparent); border-radius: 50%; opacity: 0; transform: scale(.42); }
+.chart-hotspot.is-active::before { animation: sonar-pulse 2.4s ease-out infinite; }
+.chart-hotspot::after { content: ''; position: absolute; inset: 2px; border: 1px solid color-mix(in srgb, var(--beacon-color) 34%, transparent); border-radius: 50%; opacity: .4; transition: inset .2s, opacity .2s; }
+.chart-hotspot:hover::after,.chart-hotspot:focus-visible::after { inset: -2px; opacity: .9; }
+.chart-hotspot-dot { position: absolute; inset: 11px; border-radius: 50%; background: var(--beacon-color); box-shadow: 0 0 11px color-mix(in srgb, var(--beacon-color) 72%, transparent); animation: beacon-glint 2.4s ease-in-out infinite; }
+.chart-hotspot-tooltip { position: absolute; top: 50%; left: calc(100% + 7px); transform: translateY(-50%) translateX(-3px); width: max-content; max-width: 190px; padding: 6px 8px; border: 1px solid rgba(255,255,255,.12); border-radius: 4px; background: rgba(10,10,10,.94); color: var(--beacon-color); font: 8px var(--mono); letter-spacing: .04em; white-space: nowrap; opacity: 0; transition: opacity .18s, transform .18s; pointer-events: none; }
+.chart-hotspot-tooltip[data-edge="left"] { left: auto; right: calc(100% + 7px); }
+.chart-hotspot:hover .chart-hotspot-tooltip,.chart-hotspot:focus-visible .chart-hotspot-tooltip,.chart-hotspot.is-active .chart-hotspot-tooltip { opacity: 1; transform: translateY(-50%) translateX(0); }
+@keyframes sonar-pulse { 0% { opacity: .7; transform: scale(.42); } 85%,100% { opacity: 0; transform: scale(1.65); } }
+@keyframes beacon-glint { 0%,100% { box-shadow: 0 0 7px color-mix(in srgb, var(--beacon-color) 52%, transparent); } 50% { box-shadow: 0 0 15px color-mix(in srgb, var(--beacon-color) 90%, transparent); } }
+.chart-ui { position: absolute; z-index: 20; top: 104px; right: max(24px,calc((100vw - 1340px)/2)); display: grid; justify-items: end; gap: 13px; pointer-events: none; }
+.chart-ui button { pointer-events: auto; }
+.full-map-button { display: inline-flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 4px; background: rgba(10,10,10,.72); color: #aaa79e; font: 8px var(--mono); letter-spacing: .08em; cursor: pointer; transition: border-color .2s, color .2s, background .2s; }
+.full-map-button:hover { border-color: rgba(245,196,81,.38); color: var(--gold); background: rgba(17,17,17,.92); }
+.full-map-button span { color: var(--gold); }
+.chart-jumpbar { display: flex; gap: 3px; padding: 4px; border: 1px solid rgba(255,255,255,.08); border-radius: 5px; background: rgba(10,10,10,.68); }
+.chart-jumpbar button { width: 23px; height: 23px; display: grid; place-items: center; border: 1px solid transparent; border-radius: 3px; background: transparent; color: #64625c; font: 7px var(--mono); cursor: pointer; transition: color .2s, border-color .2s, background .2s; }
+.chart-jumpbar button:hover,.chart-jumpbar button.is-active { border-color: color-mix(in srgb, var(--beacon-color) 50%, transparent); background: color-mix(in srgb, var(--beacon-color) 9%, transparent); color: var(--beacon-color); }
+.chart-bearing { display: flex; align-items: center; gap: 8px; color: #5e5c56; font: 7px var(--mono); letter-spacing: .1em; }
+.chart-bearing svg { width: 26px; height: 26px; fill: none; stroke: rgba(245,196,81,.5); stroke-width: 1; }
+.chart-bearing .bearing-needle { fill: var(--gold); stroke: none; transform-box: fill-box; transform-origin: center; transition: transform .6s cubic-bezier(.2,.72,.18,1); }
+.chart-bearing b { color: #77746b; font-size: 7px; font-weight: 400; }
+.work-card { z-index: 10; }
+.work-card { animation: chart-card-arrive .48s cubic-bezier(.2,.72,.18,1) both; }
+@keyframes chart-card-arrive { from { opacity: .52; transform: translate3d(var(--arrival-x),8px,0) scale(.985); filter: blur(2px); } to { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0); } }
+.work-content { animation: chart-copy-arrive .3s ease both; }
+@keyframes chart-copy-arrive { from { opacity: .6; transform: translate3d(var(--copy-shift),0,0); } to { opacity: 1; transform: translate3d(0,0,0); } }
+.project-type { display: inline-block; min-height: 1em; }
+.education-list { margin-top: 13px; border-top: 1px solid rgba(255,255,255,.1); }
+.education-list .education-detail { padding: 17px 0; margin: 0; border: 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+.education-list .education-detail:last-child { border-bottom: 1px solid rgba(255,255,255,.1); }
+.education-list .education-detail h3 { max-width: 100%; }
 @media (max-width: 700px) {
-  .experience-section { min-height: 100svh; }
-  .experience-content { padding-bottom: 38px; }
+  .chart-ui { top: auto; right: 50%; bottom: 50px; transform: translateX(50%); display: flex; align-items: center; gap: 7px; }
+  .chart-bearing { display: none; }
+  .chart-jumpbar { gap: 1px; padding: 3px; }
+  .chart-jumpbar button { width: 22px; height: 22px; }
+  .full-map-button { padding: 7px 8px; font-size: 7px; white-space: nowrap; }
+  .chart-hotspot-tooltip { display: none; }
+  .education-list .education-detail { padding: 14px 0; gap: 12px; }
+  .education-list .education-detail h3 { font-size: 13px; }
+  .education-list .education-detail p { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sea-chart-pan,.chart-hotspots,.chart-bearing .bearing-needle { transition-duration: .01ms; }
+  .chart-hotspot.is-active::before,.chart-hotspot-dot { animation-duration: .01ms; }
+}
+@media (max-width: 700px) {
+  .experience-section { min-height: auto; }
+  .experience-content { padding-top: 78px; padding-bottom: 38px; }
   .timeline-card { margin-top: 29px; padding-block: 17px; }
   .timeline-note { margin-top: 17px; }
 }

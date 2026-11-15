@@ -1,35 +1,32 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ArrowDown, ArrowDownRight, ArrowRight, ArrowUpRight, BrainCircuit,
-  BriefcaseBusiness, Check, ChevronDown, Code2, Database,
-  Github, Mail, Menu, MousePointer2, ScanLine,
-  X,
+  BriefcaseBusiness, Check, Code2, Database,
+  Github, Mail, Menu, MousePointer2, ScanLine, X,
 } from 'lucide-react'
-
-const PoneglyphScene = lazy(() => import('./PoneglyphScene.jsx'))
 
 const projects = [
   {
-    id: 'scholarpath', number: '01', name: 'ScholarPath', type: 'AI SYSTEMS · INFORMATION RETRIEVAL',
-    quickMetric: '.954 MRR@5',
-    color: '#f5c451', image: '/assets/scholarpath.png', imageAlt: 'ScholarPath scholarship question answering dashboard',
-    repo: 'https://github.com/NikithPrasad/ScholarPath',
-    summary: 'A local-first scholarship navigator that can show its work.',
-    description: 'A citation-grounded assistant over official scholarship guidance. BM25 and TF-IDF feed a Reciprocal Rank Fusion pipeline; the app cites the passages behind each answer, abstains when the evidence is weak, and can optionally use a local Ollama model.',
-    metrics: [['0.954', 'Source MRR@5'], ['0.931', 'Chunk Hit@3'], ['1.00', 'OOD abstention'], ['11', 'tests']],
-    flow: ['Official scheme docs', 'BM25 + TF-IDF', 'RRF ranking', 'Cited answer'],
-    stack: ['Python', 'Streamlit', 'BM25', 'scikit-learn', 'Ollama'],
-  },
-  {
-    id: 'queuewatch', number: '02', name: 'QueueWatch', type: 'COMPUTER VISION · REAL-TIME ANALYTICS',
+    id: 'queuewatch', number: '01', name: 'QueueWatch', type: 'COMPUTER VISION · REAL-TIME ANALYTICS',
     quickMetric: '12.68 FPS',
-    color: '#38bdf8', image: '/assets/queuewatch.gif', imageAlt: 'QueueWatch people detection, line crossing and zone analytics demo',
+    color: '#f5c451', image: '/assets/queuewatch.gif', imageAlt: 'QueueWatch people detection, line crossing and zone analytics demo',
     repo: 'https://github.com/NikithPrasad/QueueWatch',
     summary: 'From video frames to useful footfall signals.',
     description: 'A people-flow analytics pipeline using YOLO11 detections and ByteTrack identities. Finite-line crossing counts, editable direction names, zone occupancy, dwell estimates, and a footfall heatmap are available for uploaded clips and live sources.',
     metrics: [['13.53%', 'sMAPE'], ['1.625', 'MAE'], ['12.68', 'FPS'], ['11', 'tests']],
     flow: ['Video / webcam', 'YOLO11 detections', 'ByteTrack IDs', 'Crossing + dwell'],
     stack: ['Python', 'YOLO11', 'ByteTrack', 'OpenCV', 'Streamlit'],
+  },
+  {
+    id: 'scholarpath', number: '02', name: 'ScholarPath', type: 'AI SYSTEMS · INFORMATION RETRIEVAL',
+    quickMetric: '.954 MRR@5',
+    color: '#38bdf8', image: '/assets/scholarpath.png', imageAlt: 'ScholarPath scholarship question answering dashboard',
+    repo: 'https://github.com/NikithPrasad/ScholarPath',
+    summary: 'A local-first scholarship navigator that can show its work.',
+    description: 'A citation-grounded assistant over official scholarship guidance. BM25 and TF-IDF feed a Reciprocal Rank Fusion pipeline; the app cites the passages behind each answer, abstains when the evidence is weak, and can optionally use a local Ollama model.',
+    metrics: [['0.954', 'Source MRR@5'], ['0.931', 'Chunk Hit@3'], ['1.00', 'OOD abstention'], ['11', 'tests']],
+    flow: ['Official scheme docs', 'BM25 + TF-IDF', 'RRF ranking', 'Cited answer'],
+    stack: ['Python', 'Streamlit', 'BM25', 'scikit-learn', 'Ollama'],
   },
   {
     id: 'commerceflow', number: '03', name: 'CommerceFlow', type: 'DATA ENGINEERING · ANALYTICS',
@@ -74,6 +71,17 @@ const projects = [
     stack: ['React', 'Vite', 'Node.js', 'Express', 'MongoDB'],
   },
 ]
+
+const chartStops = [
+  { x: 85, y: 17, coordinate: '14°N 78°E', bearing: 72 },
+  { x: 92, y: 30, coordinate: '17°N 81°E', bearing: 118 },
+  { x: 83, y: 43, coordinate: '19°N 84°E', bearing: 164 },
+  { x: 91, y: 56, coordinate: '12°N 82°E', bearing: 211 },
+  { x: 82, y: 70, coordinate: '09°N 79°E', bearing: 253 },
+  { x: 90, y: 84, coordinate: '17°N 76°E', bearing: 302 },
+]
+
+const chartRoute = 'M 85 17 C 74 20 78 27 92 30 S 96 38 83 43 S 76 51 91 56 S 96 64 82 70 S 76 78 90 84'
 
 const navItems = [
   ['work', 'WORK'], ['experience', 'EXPERIENCE'], ['skills', 'SKILLS'], ['contact', 'CONTACT'],
@@ -149,7 +157,7 @@ function Hero() {
       <div className="eyebrow"><span className="status-dot" /> OPEN TO BUILDING WHAT’S NEXT <span className="eyebrow-rule" /></div>
       <h1>Building <em>AI systems</em><br />that ship<span className="gold-period">.</span></h1>
       <p className="hero-typed"><span className="typed-line">{typed}</span><span className="typing-caret">_</span><span className="typed-context"> based in Hyderabad, India</span></p>
-      <p className="hero-intro">I turn curious questions into useful software — from retrieval systems and vision models to data pipelines and full-stack tools.</p>
+      <p className="hero-intro">I turn curious questions into useful software — from retrieval systems and vision models to data pipelines and full-stack tools. After 10+ years of gaming, I’m still curious about the mechanics that make a world feel intuitive.</p>
       <div className="hero-actions"><a className="button button-gold" href="#contact">Get in touch <ArrowUpRight size={16} /></a><a className="button button-quiet" href="#work">View work <ArrowDown size={15} /></a></div>
       <div className="hero-footnote"><span>SCROLL TO EXPLORE</span><span className="scroll-line" /></div>
     </div>
@@ -216,18 +224,20 @@ function ProjectModal({ project, onClose }) {
     return () => { document.removeEventListener('keydown', onKey); document.body.classList.remove('modal-open') }
   }, [onClose])
   if (!project) return null
+  const projectIndex = projects.findIndex((item) => item.id === project.id)
+  const stop = chartStops[projectIndex]
   return <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
     <section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <button className="modal-close" onClick={onClose} aria-label="Close project details"><X size={19} /></button>
       <div className="modal-scroll">
-        <div className="modal-kicker" style={{ color: project.color }}>PONEGLYPH {project.number} <span>·</span> {project.type}</div>
+        <div className="modal-kicker" style={{ color: project.color }}>DECIPHERED LOG <span>·</span> COORD {project.number} / 06 · {stop.coordinate} <span>·</span> {project.type}</div>
         <h2 id="modal-title">{project.name}<span style={{ color: project.color }}>.</span></h2>
         <p className="modal-summary">{project.description}</p>
         <a className="modal-repo" href={project.repo} target="_blank" rel="noreferrer"><Github size={17} /> Explore source on GitHub <ArrowUpRight size={15} /></a>
         <div className="modal-image-frame"><img src={project.image} alt={project.imageAlt} /></div>
         <div className="modal-section-label">FIELD NOTES <span>MEASURED RESULTS</span></div>
         <div className="modal-metrics">{project.metrics.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div>
-        <div className="modal-section-label">SYSTEM ROUTE <span>HIGH LEVEL</span></div>
+        <div className="modal-section-label">CHARTED SYSTEM ROUTE <span>HIGH LEVEL</span></div>
         <div className="architecture-flow">{project.flow.map((step, index) => <div className="flow-step" key={step}><span>{String(index + 1).padStart(2, '0')}</span><b>{step}</b>{index < project.flow.length - 1 && <ArrowRight size={15} />}</div>)}</div>
         <div className="tech-tags">{project.stack.map((tech) => <span key={tech}>{tech}</span>)}</div>
       </div>
@@ -237,11 +247,22 @@ function ProjectModal({ project, onClose }) {
 
 function WorkSection() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [sceneReady, setSceneReady] = useState(false)
+  const [mapZoomed, setMapZoomed] = useState(true)
   const [selected, setSelected] = useState(null)
+  const [viewport, setViewport] = useState({ width: 0, height: 0 })
+  const [decodeLabel, setDecodeLabel] = useState('DECIPHERING RIO PONEGLYPH 01...')
   const markers = useRef([])
   const stageRef = useRef(null)
+  const pinnedRef = useRef(null)
+  const navigationTarget = useRef(null)
+  const navigationTimer = useRef(0)
   const active = projects[activeIndex]
+  const stop = chartStops[activeIndex]
+  const mapScale = mapZoomed ? 1.62 : 1
+  const mapFocusX = viewport.width < 700 ? .92 : .84
+  const mapX = mapZoomed && viewport.width ? viewport.width * mapFocusX - (stop.x / 100) * viewport.width * mapScale : 0
+  const mapY = mapZoomed && viewport.height ? viewport.height * .5 - (stop.y / 100) * viewport.height * mapScale : 0
+  const mapTransform = `translate3d(${mapX}px, ${mapY}px, 0) scale(${mapScale})`
   useEffect(() => {
     const preloaded = projects.map((project) => {
       const image = new Image()
@@ -251,48 +272,127 @@ function WorkSection() {
     })
     return () => preloaded.forEach((image) => { image.onload = null; image.onerror = null })
   }, [])
+  useEffect(() => () => window.clearTimeout(navigationTimer.current), [])
+  useEffect(() => {
+    const element = pinnedRef.current
+    if (!element) return undefined
+    const updateViewport = () => setViewport({ width: element.clientWidth, height: element.clientHeight })
+    updateViewport()
+    const observer = new ResizeObserver(updateViewport)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+  useEffect(() => {
+    const target = active.name.toUpperCase()
+    setDecodeLabel(`DECIPHERING RIO PONEGLYPH ${active.number}...`)
+    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
+    let tick = 0
+    const timer = window.setInterval(() => {
+      tick += 1
+      if (tick >= 10) {
+        setDecodeLabel(target)
+        window.clearInterval(timer)
+        return
+      }
+      const revealed = Math.floor((tick / 10) * target.length)
+      const scrambled = Array.from(target.slice(revealed), () => alphabet[Math.floor(Math.random() * alphabet.length)]).join('')
+      setDecodeLabel(`${target.slice(0, revealed)}${scrambled}`)
+    }, 25)
+    return () => window.clearInterval(timer)
+  }, [activeIndex, active.name, active.number])
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) setActiveIndex(Number(entry.target.dataset.index))
+        if (entry.isIntersecting) {
+          const nextIndex = Number(entry.target.dataset.index)
+          if (navigationTarget.current !== null && nextIndex !== navigationTarget.current) return
+          if (navigationTarget.current === nextIndex) {
+            navigationTarget.current = null
+            window.clearTimeout(navigationTimer.current)
+          }
+          setActiveIndex(nextIndex)
+          setMapZoomed(true)
+        }
       })
     }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 })
     markers.current.forEach((marker) => marker && observer.observe(marker))
     return () => observer.disconnect()
   }, [])
-  useEffect(() => {
-    const stage = stageRef.current
-    if (!stage) return undefined
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setSceneReady(true)
-        observer.disconnect()
-      }
-    }, { rootMargin: '420px 0px' })
-    observer.observe(stage)
-    return () => observer.disconnect()
-  }, [])
-  const goTo = (index) => markers.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  const goTo = (index) => {
+    window.clearTimeout(navigationTimer.current)
+    navigationTarget.current = index
+    setMapZoomed(true)
+    setActiveIndex(index)
+    markers.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    navigationTimer.current = window.setTimeout(() => { navigationTarget.current = null }, 1600)
+  }
+  const handleBeaconKey = (event, index) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      goTo(index)
+    }
+  }
   return <section id="work" className="work-section">
-    <div className="section-shell work-intro"><div><div className="section-kicker"><span>01 / THE WORK</span><span className="kicker-line" /></div><h2>Six Poneglyphs.<br /><em>Six proofs of work.</em></h2></div><p>Each build is a coordinate: a problem understood, a system shaped, a result measured. Follow the trail.</p></div>
+    <div className="section-shell work-intro"><div><div className="section-kicker"><span>01 / THE WORK</span><span className="kicker-line" /></div><h2>The Rio Poneglyphs.<br /><em>Chart the Grand Line.</em></h2></div><p>Decipher a beacon to land on a build. Six coordinates, six systems, and a trail of measured work.</p></div>
     <div className="work-stage" ref={stageRef}>
-      <div className="work-pinned">
-        {sceneReady && <Suspense fallback={<div className="poneglyph-scene scene-loading" aria-hidden="true" />}><PoneglyphScene activeIndex={activeIndex} /></Suspense>}
+      <div className="work-pinned" ref={pinnedRef}>
+        <div className="sea-chart-layer" aria-hidden="true">
+          <div className="sea-chart-pan" style={{ transform: mapTransform }}>
+            <svg className="sea-chart-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <pattern id="chart-grid" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M 5 0 L 0 0 0 5" fill="none" stroke="rgba(255,255,255,.07)" strokeWidth=".08" /></pattern>
+                <radialGradient id="chart-vignette"><stop offset="0" stopColor="#0a0a0a" stopOpacity="0" /><stop offset="1" stopColor="#0a0a0a" stopOpacity=".64" /></radialGradient>
+              </defs>
+              <rect width="100" height="100" fill="url(#chart-grid)" />
+              <rect width="100" height="100" fill="url(#chart-vignette)" />
+              <path className="chart-contour chart-red-line" d="M 28 -3 C 34 12 25 24 31 37 S 27 63 34 76 S 29 91 35 104" />
+              <path className="chart-contour chart-grand-line" d="M -3 51 C 15 45 24 56 39 50 S 67 54 103 46" />
+              <path className="chart-sea-route" d={chartRoute} />
+              {projects.map((project, index) => {
+                const point = chartStops[index]
+                return <g className="chart-island" key={project.id} style={{ '--beacon-color': project.color }}>
+                  <ellipse cx={point.x} cy={point.y} rx="3.1" ry="1.05" transform={`rotate(-24 ${point.x} ${point.y})`} />
+                  <ellipse cx={point.x} cy={point.y} rx="1.7" ry=".57" transform={`rotate(21 ${point.x} ${point.y})`} />
+                  <circle cx={point.x} cy={point.y} r=".18" />
+                </g>
+              })}
+              <g className="chart-next-beacon"><circle cx="16" cy="24" r=".45" /><text x="17.2" y="24.4">CHARTING NEXT</text></g>
+              <g className="chart-next-beacon"><circle cx="41" cy="75" r=".45" /><text x="42.2" y="75.4">CHARTING NEXT</text></g>
+              <g className="chart-next-beacon"><circle cx="57" cy="15" r=".45" /><text x="58.2" y="15.4">CHARTING NEXT</text></g>
+              {[10, 30, 50, 70, 90].map((tick) => <g className="chart-tick" key={tick}><path d={`M ${tick} 0 v 1.1 M 0 ${tick} h 1.1`} /><text x={tick + .5} y="2.8">{String(tick).padStart(2, '0')}°</text><text x="1.7" y={tick + .4}>{String(tick).padStart(2, '0')}°</text></g>)}
+              <text className="chart-heading-label" x="4" y="8">GRAND LINE / RIO PONEGLYPH SEA CHART</text>
+              <text className="chart-coordinate-label" x="4" y="94">NORTH BLUE</text>
+              <text className="chart-coordinate-label" x="83" y="94">HYD · 17°N 78°E</text>
+            </svg>
+          </div>
+        </div>
+        <div className="chart-hotspots" style={{ transform: mapTransform }} role="group" aria-label="Select a Poneglyph on the sea chart">
+          {projects.map((project, index) => {
+            const point = chartStops[index]
+            return <button key={project.id} type="button" className={`chart-hotspot ${index === activeIndex ? 'is-active' : ''}`} style={{ left: `${point.x}%`, top: `${point.y}%`, '--beacon-color': project.color }} aria-label={`Zoom to ${project.number}, ${project.name}`} aria-current={index === activeIndex ? 'location' : undefined} onClick={() => goTo(index)} onKeyDown={(event) => handleBeaconKey(event, index)}>
+              <span className="chart-hotspot-dot" /><span className="chart-hotspot-tooltip" data-edge={point.x > 88 ? 'left' : 'right'}>{project.number} // {project.name.toUpperCase()}</span>
+            </button>
+          })}
+        </div>
+        <div className="chart-ui">
+          <button type="button" className="full-map-button" aria-pressed={!mapZoomed} onClick={() => setMapZoomed(false)}>{mapZoomed ? 'FULL MAP' : 'MAP OVERVIEW'} <span>↗</span></button>
+          <div className="chart-jumpbar" aria-label="Jump to a Poneglyph">{projects.map((project, index) => <button key={project.id} type="button" className={index === activeIndex ? 'is-active' : ''} style={{ '--beacon-color': project.color }} aria-label={`Jump to ${project.name}`} aria-current={index === activeIndex ? 'step' : undefined} onClick={() => goTo(index)}>{project.number}</button>)}</div>
+          <div className="chart-bearing" aria-label={`Log Pose bearing ${stop.bearing} degrees`}><span>LOG POSE</span><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" /><path className="bearing-needle" style={{ transform: `rotate(${stop.bearing}deg)` }} d="M16 5 L19 17 L16 15 L13 17 Z" /><circle cx="16" cy="16" r="1.5" /></svg><b>{String(stop.bearing).padStart(3, '0')}°</b></div>
+        </div>
         <div className="work-index" aria-hidden="true">{active.number}</div>
-        <div className="work-card" style={{ '--project-accent': active.color }}>
-          <div className="work-card-top"><span>{active.number} <i /> SIX PROOFS</span><a href={active.repo} target="_blank" rel="noreferrer" aria-label={`Open ${active.name} on GitHub`}><ArrowUpRight size={18} /></a></div>
+        <div className="work-card" key={active.id} style={{ '--project-accent': active.color, '--arrival-x': activeIndex % 2 ? '-12px' : '12px' }}>
+          <div className="work-card-top"><span>{active.number} <i /> DECIPHERED COORDINATE</span><a href={active.repo} target="_blank" rel="noreferrer" aria-label={`Open ${active.name} on GitHub`}><ArrowUpRight size={18} /></a></div>
           <div className="work-card-body">
             <div className="work-visual">{projects.map((project, index) => <img className={`project-image-layer ${index === activeIndex ? 'is-active' : ''}`} key={project.id} src={project.image} alt={index === activeIndex ? project.imageAlt : ''} aria-hidden={index !== activeIndex} loading="eager" decoding="async" />)}<div className="visual-overlay" /><span className="visual-coordinate">FIG. {active.number} — FIELD RECORD</span></div>
-            <div className="work-content" key={active.id}><span className="project-type">{active.type}</span><h3>{active.name}<span>.</span></h3><p className="work-summary">{active.summary}</p>
+            <div className="work-content" key={active.id} style={{ '--copy-shift': activeIndex % 2 ? '-10px' : '10px' }}><span className="project-type" aria-live="polite">{decodeLabel}</span><h3>{active.name}<span>.</span></h3><p className="work-summary">{active.summary}</p>
               <div className="work-metrics">{active.metrics.slice(0, 3).map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div>
               <div className="work-card-bottom"><button className="details-button" onClick={() => setSelected(active)}>Details <ArrowUpRight size={14} /></button><span className="work-stack">{active.stack.slice(0, 3).join(' · ')}</span></div>
             </div>
           </div>
-          <div className="work-card-base"><span>CHARTED IN HYDERABAD</span><span>GRAND LINE / {active.number}</span></div>
+          <div className="work-card-base"><span>CHARTED IN HYDERABAD</span><span>{stop.coordinate} / {active.number}</span></div>
         </div>
-        <div className="work-progress" aria-label="Project progress">{projects.map((project, index) => <button key={project.id} aria-label={`Go to ${project.name}`} aria-current={index === activeIndex ? 'step' : undefined} className={index === activeIndex ? 'current' : ''} style={{ '--node-color': project.color }} onClick={() => goTo(index)}><span>{project.number}</span></button>)}</div>
       </div>
-      <div className="work-markers" aria-hidden="true">{projects.map((project, index) => <div className="work-marker" data-index={index} key={project.id} ref={(element) => { markers.current[index] = element }}><span>{project.number}</span><span>{project.name}</span><ChevronDown size={14} /></div>)}</div>
+      <div className="work-markers" aria-hidden="true">{projects.map((project, index) => <div className="work-marker" data-index={index} key={project.id} ref={(element) => { markers.current[index] = element }}><span>{project.number}</span><span>{project.name}</span></div>)}</div>
     </div>
     <ProjectModal project={selected} onClose={() => setSelected(null)} />
   </section>
@@ -398,7 +498,14 @@ function SkillsSection() {
     <div className="skills-heading"><h2>Tools are a compass.<br /><em>Problems are the map.</em></h2><p>I like moving between disciplines to get a useful thing over the line.</p></div>
     <div className="skills-marquee" aria-label="Technologies"><div className="marquee-track">{[...skillWords, ...skillWords].map((word, i) => <span key={`${word}-${i}`}>{word}<i>✳</i></span>)}</div></div>
     <div className="capability-grid">{capabilities.map(({ id, icon: Icon, title, text, tags }) => <article className={`capability-card capability-${id}`} key={id}><div className="capability-top"><span>{id} / CAPABILITY</span><Icon size={18} strokeWidth={1.5} /></div><h3>{title}</h3><p>{text}</p><div className="capability-tags">{tags}</div><ArrowDownRight className="capability-arrow" size={18} /></article>)}</div>
-    <div className="education-row"><div className="education-label"><span>04 / THE FOUNDATION</span><span className="kicker-line" /></div><div className="education-detail"><div><h3>VNR VJIET</h3><p>B.Tech · Computer Science & Engineering (AI/ML)</p></div><div className="education-meta"><strong>8.85<span> / 10</span></strong><span>EXPECTED 2029</span></div></div></div>
+    <div className="education-row">
+      <div className="education-label"><span>04 / THE FOUNDATION</span><span className="kicker-line" /></div>
+      <div className="education-list">
+        <div className="education-detail"><div><h3>VNR Vignana Jyothi Institute of Engineering and Technology</h3><p>B.Tech CSE (AI &amp; ML) · Hyderabad</p></div><div className="education-meta"><strong>8.85<span> / 10</span></strong><span>EXPECTED 2029</span></div></div>
+        <div className="education-detail"><div><h3>Vinjee Junior College</h3><p>Intermediate (Class XII Boards) · Hyderabad</p></div><div className="education-meta"><strong>97.7%</strong><span>CLASS XII</span></div></div>
+        <div className="education-detail"><div><h3>The Hyderabad Public School (HPS), Begumpet</h3><p>Class X</p></div><div className="education-meta"><strong>8.5</strong><span>GRADE</span></div></div>
+      </div>
+    </div>
   </section>
 }
 
