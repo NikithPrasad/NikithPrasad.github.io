@@ -239,6 +239,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 /* One Piece world chart and docked project view */
 .work-pinned { justify-content: flex-start; padding-left: clamp(22px, calc((100vw - 1320px) / 2), 100px); background: linear-gradient(135deg, #050a14, #0a1628); }
 .work-pinned::before { z-index: 1; background: radial-gradient(ellipse at 72% 50%, rgba(56,189,248,.045), transparent 45%); }
+.work-pinned::after { content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none; background: linear-gradient(to bottom, #0a0a0a 0%, rgba(10,10,10,.88) 4%, rgba(10,10,10,.4) 8%, rgba(10,10,10,0) 12%, rgba(10,10,10,0) 82%, rgba(10,10,10,.34) 88%, rgba(10,10,10,.76) 94%, #0a0a0a 100%); }
 .sea-chart-layer { z-index: 0; background: linear-gradient(135deg, #050a14, #0a1628); }
 .sea-chart-pan { z-index: 0; }
 .sea-chart-svg { overflow: hidden; }
@@ -321,6 +322,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 }
 @media (max-width: 700px) {
   .work-pinned { padding: 0; align-items: stretch; }
+  .work-pinned::after { background: linear-gradient(to bottom, #0a0a0a 0px, #0a0a0a 76px, rgba(10,10,10,0) calc(76px + 6.75vw), rgba(10,10,10,0) calc(76px + 46.125vw), #0a0a0a calc(76px + 56.25vw), #0a0a0a 100%); }
   .sea-chart-layer,.chart-hotspots { top: 76px; right: 0; bottom: auto; left: 0; height: 56.25vw; }
   .sea-chart-svg { width: 100%; height: 100%; }
   .work-card { position: absolute; left: 16px; right: 16px; bottom: 61px; width: auto; max-width: none; max-height: calc(100svh - 170px); overflow-y: auto; }
