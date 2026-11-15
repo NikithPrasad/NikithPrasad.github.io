@@ -9,6 +9,7 @@ import {
 const projects = [
   {
     id: 'scholarpath', number: '01', name: 'ScholarPath', type: 'AI SYSTEMS · INFORMATION RETRIEVAL',
+    quickMetric: '.954 MRR@5',
     color: '#f5c451', image: '/assets/scholarpath.png', imageAlt: 'ScholarPath scholarship question answering dashboard',
     repo: 'https://github.com/NikithPrasad/ScholarPath',
     summary: 'A local-first scholarship navigator that can show its work.',
@@ -19,6 +20,7 @@ const projects = [
   },
   {
     id: 'queuewatch', number: '02', name: 'QueueWatch', type: 'COMPUTER VISION · REAL-TIME ANALYTICS',
+    quickMetric: '12.68 FPS',
     color: '#38bdf8', image: '/assets/queuewatch.gif', imageAlt: 'QueueWatch people detection, line crossing and zone analytics demo',
     repo: 'https://github.com/NikithPrasad/QueueWatch',
     summary: 'From video frames to useful footfall signals.',
@@ -29,6 +31,7 @@ const projects = [
   },
   {
     id: 'commerceflow', number: '03', name: 'CommerceFlow', type: 'DATA ENGINEERING · ANALYTICS',
+    quickMetric: '7/7 GATES',
     color: '#e63946', image: '/assets/commerceflow.png', imageAlt: 'CommerceFlow retail warehouse dashboard',
     repo: 'https://github.com/NikithPrasad/CommerceFlow',
     summary: 'A reproducible path from raw retail data to trusted metrics.',
@@ -39,6 +42,7 @@ const projects = [
   },
   {
     id: 'skincheck', number: '04', name: 'SkinCheck', type: 'APPLIED ML · RESPONSIBLE AI',
+    quickMetric: '79.3% TOP-3',
     color: '#f5c451', image: '/assets/skin-disease-detection.png', imageAlt: 'SkinCheck prediction, attention map and safety disclaimer interface',
     repo: 'https://github.com/NikithPrasad/Skin-Disease-Detection',
     summary: 'A careful, explainable skin-concern awareness prototype.',
@@ -152,7 +156,7 @@ function Hero() {
         <div className="profile-heading"><div className="profile-seal">N<span>P</span><i /></div><div><h2>Chinthala<br />Nikith Prasad</h2><p>Hyderabad, India · B.Tech CSE (AI/ML)</p></div></div>
         <div className="profile-divider" />
         <div className="quick-title"><span>FEATURED REPOS</span><span className="quick-action"><MousePointer2 size={12} /> QUICK INSPECT</span></div>
-        <div className="quick-list">{projects.slice(0, 4).map((project) => <a className="quick-row" key={project.id} href={project.repo} target="_blank" rel="noreferrer"><span><i style={{ background: project.color }} />{project.name}</span><code>{project.metrics[0][0]}</code><ArrowUpRight size={14} /></a>)}</div>
+        <div className="quick-list">{projects.slice(0, 4).map((project) => <a className="quick-row" key={project.id} href={project.repo} target="_blank" rel="noreferrer"><span><i style={{ background: project.color }} />{project.name}</span><code>{project.quickMetric}</code><ArrowUpRight size={14} /></a>)}</div>
         <div className="profile-card-foot"><span><span className="status-dot" /> SHIPPING IN PUBLIC</span><span>HYD · IN</span></div>
       </aside>
       <div className="floating-coordinate"><span>17°23' N</span><span>78°29' E</span></div>
@@ -322,7 +326,7 @@ const capabilities = [
   { id: '01', icon: BrainCircuit, title: 'AI / ML & RAG', text: 'Grounded retrieval, model evaluation, responsible AI, and clear explanations.' , tags: 'PyTorch · BM25 · TF-IDF · RRF' },
   { id: '02', icon: ScanLine, title: 'Computer Vision', text: 'Detection, tracking, visual explanations, and measurable video analytics.', tags: 'YOLO11 · ByteTrack · OpenCV' },
   { id: '03', icon: Database, title: 'Data Engineering', text: 'Reliable transformations, quality checks, lineage, and analytics-ready data.', tags: 'DuckDB · Parquet · SQL' },
-  { id: '04', icon: Code2, title: 'Full-Stack Delivery', text: 'End-to-end product thinking from API boundaries to a useful interface.', tags: 'React · Node.js · MongoDB' },
+  { id: '04', icon: Code2, title: 'Full-Stack & MLOps', text: 'End-to-end product thinking from API boundaries to automated delivery.', tags: 'React · Node.js · GitHub Actions' },
 ]
 
 function SkillsSection() {
