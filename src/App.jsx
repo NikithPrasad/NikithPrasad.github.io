@@ -5,9 +5,9 @@ import {
   Github, Mail, Menu, MousePointer2, ScanLine, X,
 } from 'lucide-react'
 
-const projectCatalog = [
+const projects = [
   {
-    id: 'queuewatch', number: '06', name: 'QueueWatch', type: 'COMPUTER VISION · REAL-TIME ANALYTICS',
+    id: 'queuewatch', number: '01', name: 'QueueWatch', type: 'COMPUTER VISION · REAL-TIME ANALYTICS',
     quickMetric: '12.68 FPS',
     color: '#f5c451', image: '/assets/queuewatch.gif', imageAlt: 'QueueWatch people detection, line crossing and zone analytics demo',
     repo: 'https://github.com/NikithPrasad/QueueWatch',
@@ -18,7 +18,7 @@ const projectCatalog = [
     stack: ['Python', 'YOLO11', 'ByteTrack', 'OpenCV', 'Streamlit'],
   },
   {
-    id: 'scholarpath', number: '03', name: 'ScholarPath', type: 'AI SYSTEMS · INFORMATION RETRIEVAL',
+    id: 'scholarpath', number: '02', name: 'ScholarPath', type: 'AI SYSTEMS · INFORMATION RETRIEVAL',
     quickMetric: '.954 MRR@5',
     color: '#38bdf8', image: '/assets/scholarpath.png', imageAlt: 'ScholarPath scholarship question answering dashboard',
     repo: 'https://github.com/NikithPrasad/ScholarPath',
@@ -29,7 +29,7 @@ const projectCatalog = [
     stack: ['Python', 'Streamlit', 'BM25', 'scikit-learn', 'Ollama'],
   },
   {
-    id: 'commerceflow', number: '02', name: 'CommerceFlow', type: 'DATA ENGINEERING · ANALYTICS',
+    id: 'commerceflow', number: '03', name: 'CommerceFlow', type: 'DATA ENGINEERING · ANALYTICS',
     quickMetric: '7/7 GATES',
     color: '#e63946', image: '/assets/commerceflow.png', imageAlt: 'CommerceFlow retail warehouse dashboard',
     repo: 'https://github.com/NikithPrasad/CommerceFlow',
@@ -40,7 +40,7 @@ const projectCatalog = [
     stack: ['Python', 'DuckDB', 'Parquet', 'Pandas', 'Streamlit'],
   },
   {
-    id: 'skincheck', number: '05', name: 'SkinCheck', type: 'APPLIED ML · RESPONSIBLE AI',
+    id: 'skincheck', number: '04', name: 'SkinCheck', type: 'APPLIED ML · RESPONSIBLE AI',
     quickMetric: '79.3% TOP-3',
     color: '#f5c451', image: '/assets/skin-disease-detection.png', imageAlt: 'SkinCheck prediction, attention map and safety disclaimer interface',
     repo: 'https://github.com/NikithPrasad/Skin-Disease-Detection',
@@ -51,7 +51,7 @@ const projectCatalog = [
     stack: ['Python', 'PyTorch', 'EfficientNet', 'Grad-CAM', 'Flask'],
   },
   {
-    id: 'skinbench', number: '04', name: 'Skin Model Benchmark', type: 'EXPERIMENT DESIGN · MODEL EVALUATION',
+    id: 'skinbench', number: '05', name: 'Skin Model Benchmark', type: 'EXPERIMENT DESIGN · MODEL EVALUATION',
     color: '#38bdf8', image: '/assets/skin-disease-model-comparison.png', imageAlt: 'Skin disease model comparison benchmark interface',
     repo: 'https://github.com/NikithPrasad/Skin-Disease-Model-Comparison',
     summary: 'A controlled benchmark designed to expose the trade-offs.',
@@ -61,7 +61,7 @@ const projectCatalog = [
     stack: ['Python', 'PyTorch', 'HAM10000', 'ISIC 2018', 'pytest'],
   },
   {
-    id: 'campusspace', number: '01', name: 'CampusSpace AI', type: 'FULL-STACK · PRODUCT ENGINEERING',
+    id: 'campusspace', number: '06', name: 'CampusSpace AI', type: 'FULL-STACK · PRODUCT ENGINEERING',
     color: '#e63946', image: '/assets/campusspace-ai.png', imageAlt: 'CampusSpace E Block interactive floor plan and booking view',
     repo: 'https://github.com/NikithPrasad/CampusSpace-AI',
     summary: 'A shared campus, made easier to navigate and book.',
@@ -72,29 +72,15 @@ const projectCatalog = [
   },
 ]
 
-const projects = ['campusspace', 'commerceflow', 'scholarpath', 'skinbench', 'skincheck', 'queuewatch'].map((id) => projectCatalog.find((project) => project.id === id))
-const MAP_WIDTH = 1920
-const MAP_HEIGHT = 1080
-const MAP_SCALE_X = MAP_WIDTH / 100
-const MAP_SCALE_Y = MAP_HEIGHT / 100
-const mapBearing = (x, y) => (Math.round((Math.atan2((x - 50) * MAP_SCALE_X, (50 - y) * MAP_SCALE_Y) * 180) / Math.PI) + 360) % 360
+const mapBearing = (x, y) => (Math.round((Math.atan2((x - 50) * 16, (50 - y) * 9) * 180) / Math.PI) + 360) % 360
 
 const chartStops = [
-  { x: 75, y: 22, island: 'Foosha Village', region: 'EAST BLUE · FOOSHA VILLAGE', labelX: 72, labelY: 19, anchor: 'end', size: 1.08 },
-  { x: 50, y: 50, island: 'Reverse Mountain', region: 'RED LINE · REVERSE MOUNTAIN', labelX: 43, labelY: 53, anchor: 'end', size: 1.18 },
-  { x: 82, y: 58, island: 'Alabasta', region: 'GRAND LINE · PARADISE', labelX: 85, labelY: 61, anchor: 'start', size: 1.28 },
-  { x: 76, y: 44, island: 'Water 7', region: 'GRAND LINE · PARADISE', labelX: 72, labelY: 41, anchor: 'end', size: 1.13 },
-  { x: 65, y: 56, island: 'Sabaody Archipelago', region: 'GRAND LINE · PARADISE', labelX: 61, labelY: 59, anchor: 'end', size: 1.22 },
-  { x: 53, y: 40, island: 'Marineford', region: 'RED LINE · MARINEFORD', labelX: 58, labelY: 38, anchor: 'start', size: 1.2 },
-]
-
-const islandTerrains = [
-  { fill: '#2D6A4F', detail: '#52B788' },
-  { fill: '#7F5539', detail: '#C28E5C' },
-  { fill: '#7F5539', detail: '#C28E5C' },
-  { fill: '#6B5B4D', detail: '#38BDF8' },
-  { fill: '#2D6A4F', detail: '#52B788' },
-  { fill: '#5C4D42', detail: '#C28E5C' },
+  { x: 46, y: 52, island: 'Sabaody Archipelago', region: 'GRAND LINE · SABAODY', labelX: 43, labelY: 55, anchor: 'end', size: 1.22 },
+  { x: 31, y: 73, island: 'Ohara', region: 'WEST BLUE · OHARA', labelX: 34, labelY: 70, anchor: 'start', size: 1.08 },
+  { x: 31, y: 48, island: 'Water 7', region: 'GRAND LINE · PARADISE', labelX: 28, labelY: 45, anchor: 'end', size: 1.13 },
+  { x: 41, y: 37, island: 'Drum Island', region: 'GRAND LINE · PARADISE', labelX: 39, labelY: 34, anchor: 'end', size: 1.03 },
+  { x: 81, y: 51, island: 'Egghead', region: 'GRAND LINE · NEW WORLD', labelX: 77, labelY: 48, anchor: 'end', size: 1.18 },
+  { x: 31, y: 60, island: 'Alabasta', region: 'GRAND LINE · PARADISE', labelX: 34, labelY: 63, anchor: 'start', size: 1.28 },
 ]
 
 const unchartedStops = [
@@ -104,18 +90,6 @@ const unchartedStops = [
 ]
 
 const grandLinePath = 'M 3 50 C 20 49.7 34 50.3 50 50 S 80 49.7 97 50'
-const voyageRoutePath = (() => {
-  const points = chartStops.map((stop) => ({ x: stop.x * MAP_SCALE_X, y: stop.y * MAP_SCALE_Y }))
-  return points.reduce((path, point, index) => {
-    if (index === 0) return `M ${point.x} ${point.y}`
-    const previous = points[index - 1]
-    const before = points[Math.max(0, index - 2)]
-    const after = points[Math.min(points.length - 1, index + 1)]
-    const control1 = { x: previous.x + (point.x - before.x) / 6, y: previous.y + (point.y - before.y) / 6 }
-    const control2 = { x: point.x - (after.x - previous.x) / 6, y: point.y - (after.y - previous.y) / 6 }
-    return `${path} C ${control1.x} ${control1.y} ${control2.x} ${control2.y} ${point.x} ${point.y}`
-  }, '')
-})()
 
 const navItems = [
   ['work', 'WORK'], ['experience', 'EXPERIENCE'], ['skills', 'SKILLS'], ['contact', 'CONTACT'],
@@ -289,18 +263,15 @@ function WorkSection() {
   const [mapZoomed, setMapZoomed] = useState(true)
   const [selected, setSelected] = useState(null)
   const [viewport, setViewport] = useState({ width: 0, height: 0 })
-  const [cameraViewBox, setCameraViewBox] = useState({ x: 0, y: 0, width: MAP_WIDTH, height: MAP_HEIGHT })
+  const [cameraViewBox, setCameraViewBox] = useState({ x: 0, y: 0, width: 1600, height: 900 })
   const [decodeLabel, setDecodeLabel] = useState('DECIPHERING RIO PONEGLYPH 01...')
   const markers = useRef([])
-  const voyagePathRef = useRef(null)
-  const wakePathRef = useRef(null)
-  const fogRouteRef = useRef(null)
-  const revealNodes = useRef([])
-  const shipRef = useRef(null)
   const stageRef = useRef(null)
   const pinnedRef = useRef(null)
+  const navigationTarget = useRef(null)
+  const navigationTimer = useRef(0)
   const decodeRun = useRef(0)
-  const cameraRef = useRef({ x: 0, y: 0, width: MAP_WIDTH, height: MAP_HEIGHT })
+  const cameraRef = useRef({ x: 0, y: 0, width: 1600, height: 900 })
   const active = projects[activeIndex]
   const stop = chartStops[activeIndex]
   const bearing = mapBearing(stop.x, stop.y)
@@ -313,89 +284,7 @@ function WorkSection() {
     })
     return () => preloaded.forEach((image) => { image.onload = null; image.onerror = null })
   }, [])
-  useEffect(() => {
-    const route = voyagePathRef.current
-    const wake = wakePathRef.current
-    const fogRoute = fogRouteRef.current
-    const ship = shipRef.current
-    const stage = stageRef.current
-    const pinned = pinnedRef.current
-    if (!route || !wake || !fogRoute || !ship || !stage || !pinned) return undefined
-    const routeLength = route.getTotalLength()
-    if (!routeLength) return undefined
-
-    const targets = chartStops.map((point) => ({ x: point.x * MAP_SCALE_X, y: point.y * MAP_SCALE_Y, distance: 0, error: Infinity }))
-    const sampleCount = Math.ceil(routeLength * 1.5)
-    for (let sample = 0; sample <= sampleCount; sample += 1) {
-      const distance = routeLength * sample / sampleCount
-      const point = route.getPointAtLength(distance)
-      targets.forEach((target) => {
-        const error = (point.x - target.x) ** 2 + (point.y - target.y) ** 2
-        if (error < target.error) { target.error = error; target.distance = distance }
-      })
-    }
-
-    let progress = 0
-    let targetProgress = 0
-    let frame = 0
-    const renderVoyage = () => {
-      progress += (targetProgress - progress) * .2
-      if (Math.abs(targetProgress - progress) < .0005) progress = targetProgress
-      const segmentPosition = progress * (targets.length - 1)
-      const segment = Math.min(targets.length - 2, Math.floor(segmentPosition))
-      const segmentProgress = progress >= 1 ? 1 : segmentPosition - segment
-      const from = targets[segment].distance
-      const to = targets[segment + 1].distance
-      const distance = from + (to - from) * segmentProgress
-      const point = route.getPointAtLength(distance)
-      const before = route.getPointAtLength(Math.max(0, distance - 2))
-      const after = route.getPointAtLength(Math.min(routeLength, distance + 2))
-      const heading = Math.atan2(after.y - before.y, after.x - before.x) * 180 / Math.PI
-      ship.setAttribute('transform', `translate(${point.x} ${point.y}) rotate(${heading})`)
-      wake.style.strokeDashoffset = String(1 - progress)
-      fogRoute.style.strokeDashoffset = String(1 - progress)
-      revealNodes.current.forEach((node, index) => {
-        if (!node) return
-        const milestone = index / (targets.length - 1)
-        const revealStart = Math.max(0, milestone - .14)
-        const amount = index === 0 ? 1 : Math.max(0, Math.min(1, (progress - revealStart) / Math.max(.001, milestone - revealStart)))
-        node.setAttribute('opacity', String(amount))
-      })
-      if (Math.abs(targetProgress - progress) >= .0005) frame = window.requestAnimationFrame(renderVoyage)
-      else frame = 0
-    }
-    const updateTarget = () => {
-      const stageTop = stage.getBoundingClientRect().top + window.scrollY
-      const travel = Math.max(1, stage.offsetHeight - pinned.clientHeight)
-      const scrollStops = markers.current.map((marker) => {
-        if (!marker) return stageTop
-        const rect = marker.getBoundingClientRect()
-        const center = rect.top + window.scrollY + rect.height / 2 - pinned.clientHeight / 2
-        return Math.max(stageTop, Math.min(stageTop + travel, center))
-      })
-      const scrollY = window.scrollY
-      if (scrollY <= scrollStops[0]) targetProgress = 0
-      else if (scrollY >= scrollStops[scrollStops.length - 1]) targetProgress = 1
-      else {
-        const segment = scrollStops.findIndex((stop, index) => index < scrollStops.length - 1 && scrollY <= scrollStops[index + 1])
-        const segmentStart = scrollStops[segment]
-        const segmentEnd = scrollStops[segment + 1]
-        const segmentProgress = segmentEnd > segmentStart ? (scrollY - segmentStart) / (segmentEnd - segmentStart) : 1
-        targetProgress = (segment + segmentProgress) / (scrollStops.length - 1)
-      }
-      const activeStop = Math.max(0, Math.min(chartStops.length - 1, Math.round(targetProgress * (chartStops.length - 1))))
-      setActiveIndex(activeStop)
-      if (!frame) frame = window.requestAnimationFrame(renderVoyage)
-    }
-    window.addEventListener('scroll', updateTarget, { passive: true })
-    window.addEventListener('resize', updateTarget, { passive: true })
-    updateTarget()
-    return () => {
-      window.cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', updateTarget)
-      window.removeEventListener('resize', updateTarget)
-    }
-  }, [])
+  useEffect(() => () => window.clearTimeout(navigationTimer.current), [])
   useEffect(() => {
     const element = pinnedRef.current
     if (!element) return undefined
@@ -410,12 +299,12 @@ function WorkSection() {
     const zoom = mapZoomed ? 1.25 : 1
     const target = mapZoomed
       ? {
-          width: MAP_WIDTH / zoom,
-          height: MAP_HEIGHT / zoom,
-          x: stop.x * MAP_SCALE_X - (MAP_WIDTH / zoom) * .7,
-          y: stop.y * MAP_SCALE_Y - (MAP_HEIGHT / zoom) * .5,
+          width: 1600 / zoom,
+          height: 900 / zoom,
+          x: stop.x * 16 - (1600 / zoom) * .7,
+          y: stop.y * 9 - (900 / zoom) * .5,
         }
-      : { x: 0, y: 0, width: MAP_WIDTH, height: MAP_HEIGHT }
+      : { x: 0, y: 0, width: 1600, height: 900 }
     const from = cameraRef.current
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       cameraRef.current = target
@@ -470,18 +359,36 @@ function WorkSection() {
       window.clearTimeout(settleTimer)
     }
   }, [activeIndex, active.name, active.number])
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const nextIndex = Number(entry.target.dataset.index)
+          if (navigationTarget.current !== null && nextIndex !== navigationTarget.current) return
+          if (navigationTarget.current === nextIndex) {
+            navigationTarget.current = null
+            window.clearTimeout(navigationTimer.current)
+          }
+          setActiveIndex(nextIndex)
+          setMapZoomed(true)
+        }
+      })
+    }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 })
+    markers.current.forEach((marker) => marker && observer.observe(marker))
+    return () => observer.disconnect()
+  }, [])
   const goTo = (index) => {
+    window.clearTimeout(navigationTimer.current)
+    navigationTarget.current = index
     setMapZoomed(true)
+    setActiveIndex(index)
     markers.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  }
-  const sailOrInspectIsland = (index) => {
-    if (index <= activeIndex) { setSelected(projects[index]); return }
-    goTo(index)
+    navigationTimer.current = window.setTimeout(() => { navigationTarget.current = null }, 1600)
   }
   const handleBeaconKey = (event, index) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      sailOrInspectIsland(index)
+      goTo(index)
     }
   }
   return <section id="work" className="work-section">
@@ -492,32 +399,20 @@ function WorkSection() {
           <div className="sea-chart-pan">
             <svg className={`sea-chart-svg ${mapZoomed ? 'map-zoomed' : 'map-full'}`} viewBox={`${cameraViewBox.x} ${cameraViewBox.y} ${cameraViewBox.width} ${cameraViewBox.height}`} preserveAspectRatio="none" shapeRendering="geometricPrecision" aria-hidden="true">
               <defs>
-                <radialGradient id="ocean-fill" cx="70%" cy="48%" r="86%"><stop offset="0" stopColor="#123B6D" /><stop offset="1" stopColor="#0B2545" /></radialGradient>
-                <pattern id="chart-grid" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M 5 0 L 0 0 0 5" fill="none" stroke="#315577" strokeOpacity=".42" strokeWidth=".07" /></pattern>
-                <pattern id="redline-strata" width="2.5" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(22)"><path d="M 0 0 H 2.5" fill="none" stroke="#DC2626" strokeOpacity=".24" strokeWidth=".11" /></pattern>
-                <linearGradient id="red-line-fill" x1="0" x2="1"><stop offset="0" stopColor="#7F1D1D" /><stop offset=".5" stopColor="#991B1B" /><stop offset="1" stopColor="#7F1D1D" /></linearGradient>
-                <radialGradient id="chart-vignette"><stop offset="0" stopColor="#123B6D" stopOpacity=".02" /><stop offset="1" stopColor="#0B2545" stopOpacity=".22" /></radialGradient>
-                <radialGradient id="fog-soft-reveal"><stop offset="0" stopColor="black" /><stop offset=".62" stopColor="black" stopOpacity=".9" /><stop offset="1" stopColor="black" stopOpacity="0" /></radialGradient>
-                <filter id="fog-route-soft" x="-12%" y="-80%" width="124%" height="260%"><feGaussianBlur stdDeviation="32" /></filter>
-                <mask id="voyage-fog-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT}>
-                  <rect x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} fill="white" />
-                  <path ref={fogRouteRef} d={voyageRoutePath} pathLength="1" fill="none" stroke="black" strokeWidth="180" strokeLinecap="round" strokeDasharray="1" strokeDashoffset="1" filter="url(#fog-route-soft)" />
-                  {chartStops.map((point, index) => <circle key={`reveal-${index}`} ref={(element) => { revealNodes.current[index] = element }} cx={point.x * MAP_SCALE_X} cy={point.y * MAP_SCALE_Y} r={index === 0 ? 310 : 270} fill="url(#fog-soft-reveal)" opacity={index === 0 ? 1 : 0} />)}
-                </mask>
+                <linearGradient id="ocean-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#050a14" /><stop offset="1" stopColor="#0a1628" /></linearGradient>
+                <pattern id="chart-grid" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M 5 0 L 0 0 0 5" fill="none" stroke="#1e293b" strokeOpacity=".62" strokeWidth=".07" /></pattern>
+                <pattern id="redline-strata" width="2.5" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(22)"><path d="M 0 0 H 2.5" fill="none" stroke="#e63946" strokeOpacity=".24" strokeWidth=".11" /></pattern>
+                <linearGradient id="red-line-fill" x1="0" x2="1"><stop offset="0" stopColor="#5b171d" /><stop offset=".5" stopColor="#7f1d1d" /><stop offset="1" stopColor="#5a171e" /></linearGradient>
+                <radialGradient id="chart-vignette"><stop offset="0" stopColor="#050a14" stopOpacity=".02" /><stop offset="1" stopColor="#050a14" stopOpacity=".6" /></radialGradient>
               </defs>
-              <g transform="scale(19.2 10.8)">
+              <g transform="scale(16 9)">
               <rect width="100" height="100" fill="url(#ocean-fill)" />
               <rect width="100" height="100" fill="url(#chart-grid)" />
               <rect width="100" height="100" fill="url(#chart-vignette)" />
-              </g>
-              <path ref={voyagePathRef} className="voyage-route-base" d={voyageRoutePath} />
-              <path ref={wakePathRef} className="voyage-route-wake" pathLength="1" d={voyageRoutePath} />
-              <g transform="scale(19.2 10.8)">
               {[10, 30, 50, 70, 90].map((tick) => <g className="chart-tick" key={tick}><path d={`M ${tick} 0 v 1.2 M 0 ${tick} h 1.2`} /><text x={tick - 1.5} y="2.8">{String(tick).padStart(2, '0')}</text><text x="1.7" y={tick + .4}>{String(tick).padStart(2, '0')}</text></g>)}
-              <path className="chart-redline-land" d="M 44 -3 C 47 7 44 17 47 27 C 50 37 45 43 49 50 C 53 57 47 65 50 77 C 53 88 47 96 49 103 L 55 103 C 53 95 56 87 54 76 C 51 65 56 57 53 50 C 50 43 55 37 52 27 C 49 17 56 7 54 -3 Z" />
-              <path className="chart-redline-texture" d="M 44 -3 C 47 7 44 17 47 27 C 50 37 45 43 49 50 C 53 57 47 65 50 77 C 53 88 47 96 49 103 L 55 103 C 53 95 56 87 54 76 C 51 65 56 57 53 50 C 50 43 55 37 52 27 C 49 17 56 7 54 -3 Z" />
-              <path className="chart-redline-ridge" d="M 50 -2 C 54 8 48 17 51 27 S 47 42 52 50 S 49 65 52 77 S 49 92 52 102" />
-              <path className="calm-belt-band" d="M 0 41.5 H 100 V 43.5 H 0 Z M 0 56.5 H 100 V 58.5 H 0 Z" />
+              <path className="chart-redline-land" d="M 50 -3 C 54 7 49 17 52 27 C 55 38 49 43 52 50 C 55 59 50 66 53 77 C 56 88 50 95 53 103 L 56 103 C 53 92 59 84 56 75 C 53 65 59 58 56 49 C 53 40 59 33 56 25 C 53 15 59 7 55 -3 Z" />
+              <path className="chart-redline-texture" d="M 50 -3 C 54 7 49 17 52 27 C 55 38 49 43 52 50 C 55 59 50 66 53 77 C 56 88 50 95 53 103 L 56 103 C 53 92 59 84 56 75 C 53 65 59 58 56 49 C 53 40 59 33 56 25 C 53 15 59 7 55 -3 Z" />
+              <path className="chart-redline-ridge" d="M 52 -2 C 56 8 51 17 54 27 S 51 42 54 50 S 51 65 55 77 S 52 92 54 102" />
               <path className="chart-calm-belt" d="M 3 42.5 C 24 42.3 39 42.7 51 42.5 S 78 42.3 97 42.5 M 3 57.5 C 24 57.7 39 57.3 51 57.5 S 78 57.7 97 57.5" />
               <path className="chart-grand-line" d={grandLinePath} />
               <path className="chart-grand-line-core" d={grandLinePath} />
@@ -527,21 +422,22 @@ function WorkSection() {
               <text className="chart-blue-label" x="77" y="17">EAST BLUE</text>
               <text className="chart-blue-label" x="10" y="86">WEST BLUE</text>
               <text className="chart-blue-label" x="77" y="86">SOUTH BLUE</text>
-              <text className="chart-grand-label" x="72" y="48">PARADISE</text>
-              <text className="chart-grand-label" x="24" y="48">NEW WORLD</text>
-              <g className="map-landmark reverse-mountain" transform="translate(50 50)">
-                <path d="M -3.2 2 L -1.1 -2.5 L 0 -.4 L 1.2 -2.8 L 3.2 2 Z" />
-                <path className="reverse-mountain-cross" d="M -2.6 -2.6 L 2.6 2.6 M 2.6 -2.6 L -2.6 2.6" />
-                <text x="3.4" y="-.5">REVERSE MOUNTAIN X</text>
+              <text className="chart-grand-label" x="20" y="49">PARADISE</text>
+              <text className="chart-grand-label" x="72" y="45">NEW WORLD</text>
+              <g className="map-landmark reverse-mountain" transform="translate(53 42.5)">
+                <path d="M -1.35 .7 L -.45 -.65 L .05 .15 L .65 -1.05 L 1.45 .7 Z" />
+                <text x="1.8" y="-.5">REVERSE MOUNTAIN</text>
+              </g>
+              <g className="map-landmark mary-geoise" transform="translate(56 47.1)">
+                <path d="M 0 -.65 L .65 0 0 .65 -.65 0 Z" />
+                <text x="1.4" y=".25">MARY GEOISE</text>
               </g>
               <text className="chart-heading-label" x="4" y="7">GRAND LINE / WORLD NAVIGATION CHART</text>
-              <text className="chart-coordinate-label" x="4" y="96">EAST BLUE → GRAND LINE → MARINEFORD</text>
+              <text className="chart-coordinate-label" x="4" y="96">NORTH IS UP · ROUTES NOT TO SCALE</text>
               {projects.map((project, index) => {
                 const point = chartStops[index]
-                const terrain = islandTerrains[index]
-                return <g className="chart-island" key={project.id} style={{ '--beacon-color': project.color, '--island-fill': terrain.fill, '--island-detail': terrain.detail }}>
+                return <g className="chart-island" key={project.id} style={{ '--beacon-color': project.color }}>
                   <g transform={`translate(${point.x} ${point.y}) scale(${point.size})`}>
-                    <ellipse className="island-shallow-water" rx="3.15" ry="2.05" />
                     {index === 0 && <g className="archipelago-shapes"><path d="M -2.45 -.1 C -2.2 -.95 -1.2 -1.1 -.65 -.35 C -.25 .15 -.75 .95 -1.55 .8 C -2.2 .72 -2.7 .48 -2.45 -.1 Z" /><path d="M -.25 -.72 C .15 -1.55 1.13 -1.42 1.34 -.7 C 1.55 .05 .85 .57 .22 .28 C -.15 .12 -.52 -.2 -.25 -.72 Z" /><path d="M 1.2 .6 C 1.58 .1 2.25 .42 2.34 .95 C 2.4 1.42 1.78 1.62 1.38 1.28 C 1.1 1.05 1.02 .83 1.2 .6 Z" /></g>}
                     {index !== 0 && <path className="island-silhouette" d="M -2.55 -.15 C -2.2 -1.03 -1.38 -.92 -1.02 -1.46 C -.38 -1.8 .05 -1.12 .58 -1.24 C 1.15 -1.48 2.22 -.89 2.06 -.1 C 2.64 .54 1.82 1.37 1.18 1.12 C .53 1.61 -.04 1.03 -.64 1.4 C -1.24 1.72 -2.35 1.1 -2.08 .48 C -2.62 .32 -2.83 .08 -2.55 -.15 Z" />}
                     <path className="island-topography" d="M -1.72 -.14 C -1.38 -.78 -.76 -.78 -.39 -.39 C .07 -.95 .98 -.63 1.09 -.07 C 1.54 .44 .75 .88 .28 .59 C -.24 1.05 -.81 .58 -1.15 .75 C -1.58 .58 -1.89 .25 -1.72 -.14 Z" />
@@ -579,35 +475,15 @@ function WorkSection() {
                 <text className="uncharted-island-name" x={place.labelX} y={place.labelY + 1.1} textAnchor={place.anchor}>{place.island}</text>
               </g>)}
               </g>
-              <rect className="voyage-fog" x="0" y="0" width={MAP_WIDTH} height={MAP_HEIGHT} mask="url(#voyage-fog-mask)" />
-              <g ref={shipRef} className="going-merry" transform={`translate(${chartStops[0].x * MAP_SCALE_X} ${chartStops[0].y * MAP_SCALE_Y})`} aria-hidden="true">
-                <ellipse className="merry-ripple" cx="0" cy="15" rx="18" ry="2.8" />
-                <path className="merry-hull" d="M -22 4 Q -7 10 10 7 L 23 1 L 17 12 Q 1 17 -15 12 Z" />
-                <path className="merry-hull-plank" d="M -16 7 Q 0 12 17 5 M -13 11 Q 2 15 14 9" />
-                <path className="merry-keel" d="M -11 14 Q 2 17 13 11" />
-                <path className="merry-mast" d="M -8 5 V -19 M 6 6 V -15" />
-                <path className="merry-sail" d="M -8 -16 Q -13 -8 -8 1 L -20 1 Q -15 -9 -8 -16 Z M 6 -13 Q 12 -7 6 1 L 17 1 Q 14 -8 6 -13 Z" />
-                <path className="merry-sail-seam" d="M -8 -15 Q -12 -7 -8 0 M 6 -12 Q 10 -6 6 0" />
-                <path className="merry-flag" d="M -8 -19 Q -2 -21 3 -18 L 3 -11 Q -2 -13 -8 -10 Z" />
-                <path className="merry-flag-mark" d="M -5 -16 Q -2 -18 1 -16 M -6 -14.5 H 2 M -4 -13 L -5 -11.5 M 0 -13 L 1 -11.5" />
-                <path className="merry-deck" d="M -15 3 Q 0 6 15 2 M -12 0 H 10" />
-                <g className="merry-figurehead" transform="translate(20 1)">
-                  <path className="merry-wool" d="M -4 -.3 C -6 -2.3 -4.7 -4.6 -2.5 -4.2 C -1.5 -6.4 1.2 -6.1 2 -4.2 C 4.5 -4.7 5.7 -2.6 4.5 -.8 C 6.6 .8 5.5 3.3 3.3 3.1 C 1.8 5.3 -.8 5.2 -1.8 3.6 C -4.6 4.3 -6.2 2.2 -4.8 .9 C -6.3 .1 -5.7 -.1 -4 -.3 Z" />
-                  <path className="merry-ear" d="M -3 -3.1 L -5.7 -5.7 L -4.7 -2.1 M 2.7 -3 L 5.2 -5.4 L 4.5 -1.8" />
-                  <path className="merry-muzzle" d="M -.7 -1.1 Q 1.4 -2 3.2 -.7 L 3.8 1.1 Q 2 2.6 .1 1.5 Z" />
-                  <circle className="merry-eye" cx="-.5" cy="-.9" r=".38" />
-                  <path className="merry-nose" d="M 3 -.1 Q 4.4 .1 3.6 1.1" />
-                </g>
-              </g>
             </svg>
           </div>
         </div>
         <div className="chart-hotspots" role="group" aria-label="Select a Poneglyph on the sea chart">
           {projects.map((project, index) => {
             const point = chartStops[index]
-            const left = (point.x * MAP_SCALE_X - cameraViewBox.x) / cameraViewBox.width * 100
-            const top = (point.y * MAP_SCALE_Y - cameraViewBox.y) / cameraViewBox.height * 100
-            return <button key={project.id} type="button" className={`chart-hotspot ${index === activeIndex ? 'is-active' : ''} ${index > activeIndex ? 'is-locked' : ''}`} style={{ left: `${left}%`, top: `${top}%`, '--beacon-color': project.color }} aria-label={index <= activeIndex ? `Open log for ${project.name}` : `Sail to ${project.number}, ${project.name}`} aria-current={index === activeIndex ? 'location' : undefined} onClick={() => sailOrInspectIsland(index)} onKeyDown={(event) => handleBeaconKey(event, index)}>
+            const left = (point.x * 16 - cameraViewBox.x) / cameraViewBox.width * 100
+            const top = (point.y * 9 - cameraViewBox.y) / cameraViewBox.height * 100
+            return <button key={project.id} type="button" className={`chart-hotspot ${index === activeIndex ? 'is-active' : ''}`} style={{ left: `${left}%`, top: `${top}%`, '--beacon-color': project.color }} aria-label={`Zoom to ${project.number}, ${project.name}`} aria-current={index === activeIndex ? 'location' : undefined} onClick={() => goTo(index)} onKeyDown={(event) => handleBeaconKey(event, index)}>
               <span className="chart-hotspot-dot" /><span className="chart-hotspot-tooltip" data-edge={point.x > 76 ? 'left' : 'right'}>{project.number} // {project.name.toUpperCase()} · {point.island.toUpperCase()}</span>
             </button>
           })}
