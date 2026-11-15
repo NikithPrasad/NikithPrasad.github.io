@@ -1,0 +1,122 @@
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[margin=0.5in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[scaled=0.96]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage{tabularx,array,enumitem,titlesec,hyperref,xcolor}
+
+\hypersetup{colorlinks=true,urlcolor=black,linkcolor=black}
+\urlstyle{same}
+\pagestyle{empty}
+\pagenumbering{gobble}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\tabcolsep}{0pt}
+\setlength{\emergencystretch}{1.5em}
+\linespread{1.0}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+\titleformat{\section}
+  {\large\bfseries\scshape}
+  {}{0pt}{}
+  [\vspace{-2pt}\titlerule]
+\titlespacing*{\section}{0pt}{10pt}{4.5pt}
+
+\setlist[itemize]{
+  leftmargin=13pt,
+  label=\textbullet,
+  labelsep=5pt,
+  topsep=2.5pt,
+  itemsep=2.5pt,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+\newcommand{\projectheading}[3]{%
+  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedleft\arraybackslash}p{0.51\linewidth}@{}}
+    \href{#2}{\textbf{#1}} & {\footnotesize #3}\\
+  \end{tabularx}%
+}
+
+\begin{document}
+\fontsize{10.2}{12.8}\selectfont
+
+\begin{center}
+  {\fontsize{20}{22}\selectfont\bfseries Chinthala Nikith Prasad}\\[3pt]
+  {\small Hyderabad, India \textbar\
+  \href{mailto:chinthalanikithprasad0201@gmail.com}{chinthalanikithprasad0201@gmail.com} \textbar\
+  \href{tel:+919412568888}{+91 94125 68888} \textbar\
+  \href{https://github.com/NikithPrasad}{github.com/NikithPrasad} \textbar\
+  \href{https://nikithprasad.github.io}{nikithprasad.github.io}}
+\end{center}
+\vspace{-7pt}
+
+\section*{Summary}
+B.Tech CSE (AI \& ML) student building end-to-end systems across RAG, computer vision, data engineering, and full-stack software; seeking AI/ML or Software Engineering internships.
+
+\section*{Experience}
+\textbf{Handshake AI - AI Fellow (Freelance)}\hfill\textit{Oct 2026 - Nov 2026}\\[-1pt]
+\textit{Remote}
+\begin{itemize}
+  \item Stress-tested LLM reasoning across varied and edge-case prompts, identifying unsupported answers, contradictions, and brittle response patterns.
+  \item Graded model outputs against strict task-specific rubrics and documented recurring failure modes to improve evaluation consistency.
+\end{itemize}
+
+\section*{Selected Projects}
+\projectheading{ScholarPath}{https://github.com/NikithPrasad/ScholarPath}{Python, Streamlit, BM25, TF-IDF, RRF, Ollama}
+\begin{itemize}
+  \item 0.954 Source MRR@5 and 0.931 Chunk Hit@3 on a 35-question retrieval evaluation.
+  \item Combined BM25 and TF-IDF with reciprocal-rank fusion, source citations, OOD abstention, and eligibility screening.
+\end{itemize}
+\vspace{3.5pt}
+
+\projectheading{QueueWatch}{https://github.com/NikithPrasad/QueueWatch}{Python, YOLO11, ByteTrack, OpenCV, Streamlit}
+\begin{itemize}
+  \item 13.53\% sMAPE, 1.625 MAE, and 12.68 FPS measured on a 155-frame evaluation clip.
+  \item Implemented YOLO11 + ByteTrack line-crossing counts, zone dwell and occupancy, directional flows, and footfall heatmaps for file or live streams.
+\end{itemize}
+\vspace{3.5pt}
+
+\projectheading{CommerceFlow}{https://github.com/NikithPrasad/CommerceFlow}{Python, DuckDB, Parquet, Streamlit, Plotly}
+\begin{itemize}
+  \item 7/7 quality gates, 0.0 reconciliation delta, and 4,000 processed synthetic orders.
+  \item Built reproducible CSV-to-Parquet ETL and parameterized DuckDB analytics with invalid/orphan quarantine and SHA-256 input lineage.
+\end{itemize}
+\vspace{3.5pt}
+
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedleft\arraybackslash}p{0.51\linewidth}@{}}
+  \href{https://github.com/NikithPrasad/Skin-Disease-Detection}{\textbf{SkinCheck}} \&
+  \href{https://github.com/NikithPrasad/Skin-Disease-Model-Comparison}{\textbf{Model Benchmark}} &
+  {\footnotesize PyTorch, EfficientNet-B0, ResNet50, Grad-CAM}\\
+\end{tabularx}
+\begin{itemize}
+  \item SkinCheck: 79.3\% Top-3 accuracy, 0.937 Macro AUC, and 78.4\% melanoma recall.
+  \item Benchmarked 4 architectures across 3 seeds; ResNet50 reached 85.8\% internal accuracy, with Grad-CAM localization and OOD photo screening.
+\end{itemize}
+\vspace{3.5pt}
+\projectheading{CampusSpace AI}{https://github.com/NikithPrasad/CampusSpace-AI}{React, Node.js, Express 5, MongoDB, JWT, Zod}
+\begin{itemize}
+  \item 14 backend integration tests; interactive E Block booking covers 50 spaces across five floors.
+  \item Built React booking flows and Express 5 APIs with MongoDB, JWT authentication, RBAC, Zod validation, and booking-conflict checks.
+\end{itemize}
+
+\section*{Education}
+\begin{tabularx}{\linewidth}{@{}Xr@{}}
+  \textbf{VNR Vignana Jyothi Institute of Engineering and Technology} & Hyderabad, India\\
+  B.Tech, Computer Science \& Engineering (AI \& ML) \textbar\ CGPA: 8.85/10 & \textit{Expected 2029}
+\end{tabularx}\\[2pt]
+\fontsize{9.5}{11.5}\selectfont Coursework: Data Structures, DBMS, OOP, Probability and Statistics, Data Analytics, Systems Analysis and Design.\normalsize
+
+\section*{Technical Skills}
+\textbf{Programming:} Python, C, JavaScript, SQL, Java (coursework).\\
+\textbf{AI/ML:} PyTorch, CNNs, transfer learning, RAG, BM25, TF-IDF, Ollama, model evaluation.\\
+\textbf{Computer vision:} YOLO11, ByteTrack, OpenCV, Grad-CAM, image and video inference.\\
+\textbf{Web/backend:} React, Node.js, Express 5, Streamlit, REST APIs, HTML5, CSS3, Tailwind CSS, Zod.\\
+\textbf{Data:} MongoDB, DuckDB, Parquet, pandas, NumPy, Power BI.\\
+\textbf{Tools:} GitHub Actions, pytest, Postman, JWT, RBAC.
+
+\end{document}

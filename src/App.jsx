@@ -407,15 +407,15 @@ function ContactIcon({ children }) { return <span className="contact-icon-shell"
 function ContactSection() {
   const [copied, setCopied] = useState(false)
   const copyEmail = async () => {
-    try { await navigator.clipboard.writeText('chinthalanikprasad0201@gmail.com'); setCopied(true); window.setTimeout(() => setCopied(false), 1700) }
-    catch { window.location.href = 'mailto:chinthalanikprasad0201@gmail.com' }
+    try { await navigator.clipboard.writeText('chinthalanikithprasad0201@gmail.com'); setCopied(true); window.setTimeout(() => setCopied(false), 1700) }
+    catch { window.location.href = 'mailto:chinthalanikithprasad0201@gmail.com' }
   }
   return <section id="contact" className="contact-section section-shell">
     <div className="section-kicker"><span>05 / MAKE CONTACT</span><span className="kicker-line" /></div>
-    <div className="contact-layout"><div className="contact-copy"><span className="micro-label">THE LOG POSE POINTS HERE</span><h2>Have a good<br /><em>problem?</em></h2><p>I’m always interested in thoughtful teams, ambitious ideas, and useful things to build.</p><a className="button button-gold" href="mailto:chinthalanikprasad0201@gmail.com">Say hello <ArrowUpRight size={16} /></a></div>
+    <div className="contact-layout"><div className="contact-copy"><span className="micro-label">THE LOG POSE POINTS HERE</span><h2>Have a good<br /><em>problem?</em></h2><p>I’m always interested in thoughtful teams, ambitious ideas, and useful things to build.</p><a className="button button-gold" href="mailto:chinthalanikithprasad0201@gmail.com">Say hello <ArrowUpRight size={16} /></a></div>
       <div className="contact-links">
         <a className="contact-link" href="https://github.com/NikithPrasad" target="_blank" rel="noreferrer"><ContactIcon><Github size={21} /></ContactIcon><span><small>CODE & PROJECTS</small><strong>GitHub</strong></span><ArrowUpRight size={16} /></a>
-        <button className="contact-link" onClick={copyEmail}><ContactIcon>{copied ? <Check size={20} /> : <Mail size={20} />}</ContactIcon><span><small>{copied ? 'COPIED TO CLIPBOARD' : 'CLICK TO COPY'}</small><strong>chinthalanikprasad0201@gmail.com</strong></span>{copied ? <Check size={16} /> : <ArrowUpRight size={16} />}</button>
+        <button className="contact-link" onClick={copyEmail}><ContactIcon>{copied ? <Check size={20} /> : <Mail size={20} />}</ContactIcon><span><small>{copied ? 'COPIED TO CLIPBOARD' : 'CLICK TO COPY'}</small><strong>chinthalanikithprasad0201@gmail.com</strong></span>{copied ? <Check size={16} /> : <ArrowUpRight size={16} />}</button>
         <a className="contact-link" href="/resume.pdf" target="_blank" rel="noreferrer"><ContactIcon><BriefcaseBusiness size={19} /></ContactIcon><span><small>ONE-PAGE OVERVIEW</small><strong>Resume PDF</strong></span><ArrowUpRight size={16} /></a>
       </div>
     </div>
