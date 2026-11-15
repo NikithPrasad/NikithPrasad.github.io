@@ -83,6 +83,15 @@ const chartStops = [
   { x: 31, y: 60, island: 'Alabasta', region: 'GRAND LINE · PARADISE', labelX: 34, labelY: 63, anchor: 'start', size: 1.28 },
 ]
 
+const islandTerrains = [
+  { fill: '#2D6A4F', detail: '#52B788' },
+  { fill: '#3A5A40', detail: '#7F5539' },
+  { fill: '#6B5B4D', detail: '#38BDF8' },
+  { fill: '#5C4D42', detail: '#CBD5E1' },
+  { fill: '#334155', detail: '#F59E0B' },
+  { fill: '#8B5E3C', detail: '#D4A373' },
+]
+
 const unchartedStops = [
   { id: 'skypiea', island: 'SKYPIEA', x: 37, y: 23, size: .9, labelX: 39, labelY: 21, anchor: 'start' },
   { id: 'fishman', island: 'FISH-MAN ISLAND', x: 56, y: 65, size: 1.04, labelX: 59, labelY: 68, anchor: 'start' },
@@ -399,11 +408,11 @@ function WorkSection() {
           <div className="sea-chart-pan">
             <svg className={`sea-chart-svg ${mapZoomed ? 'map-zoomed' : 'map-full'}`} viewBox={`${cameraViewBox.x} ${cameraViewBox.y} ${cameraViewBox.width} ${cameraViewBox.height}`} preserveAspectRatio="none" shapeRendering="geometricPrecision" aria-hidden="true">
               <defs>
-                <linearGradient id="ocean-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#050a14" /><stop offset="1" stopColor="#0a1628" /></linearGradient>
-                <pattern id="chart-grid" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M 5 0 L 0 0 0 5" fill="none" stroke="#1e293b" strokeOpacity=".62" strokeWidth=".07" /></pattern>
-                <pattern id="redline-strata" width="2.5" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(22)"><path d="M 0 0 H 2.5" fill="none" stroke="#e63946" strokeOpacity=".24" strokeWidth=".11" /></pattern>
-                <linearGradient id="red-line-fill" x1="0" x2="1"><stop offset="0" stopColor="#5b171d" /><stop offset=".5" stopColor="#7f1d1d" /><stop offset="1" stopColor="#5a171e" /></linearGradient>
-                <radialGradient id="chart-vignette"><stop offset="0" stopColor="#050a14" stopOpacity=".02" /><stop offset="1" stopColor="#050a14" stopOpacity=".6" /></radialGradient>
+                <radialGradient id="ocean-fill" cx="70%" cy="45%" r="85%"><stop offset="0" stopColor="#0E3460" /><stop offset="1" stopColor="#091E3A" /></radialGradient>
+                <pattern id="chart-grid" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M 5 0 L 0 0 0 5" fill="none" stroke="#2b5282" strokeOpacity=".46" strokeWidth=".07" /></pattern>
+                <pattern id="redline-strata" width="2.5" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(22)"><path d="M 0 0 H 2.5" fill="none" stroke="#DC2626" strokeOpacity=".24" strokeWidth=".11" /></pattern>
+                <linearGradient id="red-line-fill" x1="0" x2="1"><stop offset="0" stopColor="#7F1D1D" /><stop offset=".5" stopColor="#991B1B" /><stop offset="1" stopColor="#7F1D1D" /></linearGradient>
+                <radialGradient id="chart-vignette"><stop offset="0" stopColor="#0E3460" stopOpacity=".02" /><stop offset="1" stopColor="#091E3A" stopOpacity=".3" /></radialGradient>
               </defs>
               <g transform="scale(16 9)">
               <rect width="100" height="100" fill="url(#ocean-fill)" />
@@ -436,8 +445,10 @@ function WorkSection() {
               <text className="chart-coordinate-label" x="4" y="96">NORTH IS UP · ROUTES NOT TO SCALE</text>
               {projects.map((project, index) => {
                 const point = chartStops[index]
-                return <g className="chart-island" key={project.id} style={{ '--beacon-color': project.color }}>
+                const terrain = islandTerrains[index]
+                return <g className="chart-island" key={project.id} style={{ '--beacon-color': project.color, '--island-fill': terrain.fill, '--island-detail': terrain.detail }}>
                   <g transform={`translate(${point.x} ${point.y}) scale(${point.size})`}>
+                    <ellipse className="island-shallow-water" rx="3.15" ry="2.05" />
                     {index === 0 && <g className="archipelago-shapes"><path d="M -2.45 -.1 C -2.2 -.95 -1.2 -1.1 -.65 -.35 C -.25 .15 -.75 .95 -1.55 .8 C -2.2 .72 -2.7 .48 -2.45 -.1 Z" /><path d="M -.25 -.72 C .15 -1.55 1.13 -1.42 1.34 -.7 C 1.55 .05 .85 .57 .22 .28 C -.15 .12 -.52 -.2 -.25 -.72 Z" /><path d="M 1.2 .6 C 1.58 .1 2.25 .42 2.34 .95 C 2.4 1.42 1.78 1.62 1.38 1.28 C 1.1 1.05 1.02 .83 1.2 .6 Z" /></g>}
                     {index !== 0 && <path className="island-silhouette" d="M -2.55 -.15 C -2.2 -1.03 -1.38 -.92 -1.02 -1.46 C -.38 -1.8 .05 -1.12 .58 -1.24 C 1.15 -1.48 2.22 -.89 2.06 -.1 C 2.64 .54 1.82 1.37 1.18 1.12 C .53 1.61 -.04 1.03 -.64 1.4 C -1.24 1.72 -2.35 1.1 -2.08 .48 C -2.62 .32 -2.83 .08 -2.55 -.15 Z" />}
                     <path className="island-topography" d="M -1.72 -.14 C -1.38 -.78 -.76 -.78 -.39 -.39 C .07 -.95 .98 -.63 1.09 -.07 C 1.54 .44 .75 .88 .28 .59 C -.24 1.05 -.81 .58 -1.15 .75 C -1.58 .58 -1.89 .25 -1.72 -.14 Z" />
