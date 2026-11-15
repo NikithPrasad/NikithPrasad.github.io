@@ -237,16 +237,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 }
 
 /* One Piece world chart and docked project view */
-.work-pinned { justify-content: flex-start; padding-left: clamp(22px, calc((100vw - 1320px) / 2), 100px); background: linear-gradient(135deg, #091e3a, #0e3460); }
+.work-pinned { justify-content: flex-start; padding-left: clamp(22px, calc((100vw - 1320px) / 2), 100px); background: linear-gradient(135deg, #0b2545, #123b6d); }
 .work-pinned::before { z-index: 1; background: radial-gradient(ellipse at 72% 50%, rgba(56,189,248,.045), transparent 45%); }
 .work-pinned::after { content: ''; position: absolute; z-index: 2; inset: 0; pointer-events: none; background: linear-gradient(to bottom, #0a0a0a 0%, rgba(10,10,10,.88) 4%, rgba(10,10,10,.4) 8%, rgba(10,10,10,0) 12%, rgba(10,10,10,0) 82%, rgba(10,10,10,.34) 88%, rgba(10,10,10,.76) 94%, #0a0a0a 100%); }
-.sea-chart-layer { z-index: 0; background: radial-gradient(ellipse at 70% 48%, #0e3460 0%, #091e3a 72%); }
+.sea-chart-layer { z-index: 0; background: radial-gradient(ellipse at 70% 48%, #123b6d 0%, #0b2545 72%); }
 .sea-chart-pan { z-index: 0; }
 .sea-chart-svg { overflow: hidden; }
 .chart-redline-land { fill: url(#red-line-fill); stroke: #dc2626; stroke-opacity: .82; stroke-width: .3; vector-effect: non-scaling-stroke; }
 .chart-redline-texture { fill: url(#redline-strata); opacity: .8; }
 .chart-redline-ridge { fill: none; stroke: #dc2626; stroke-opacity: .95; stroke-width: .22; stroke-dasharray: .55 .45; vector-effect: non-scaling-stroke; }
-.chart-calm-belt { fill: none; stroke: rgba(56,189,248,.25); stroke-width: .18; stroke-dasharray: .7 .48; vector-effect: non-scaling-stroke; }
+.calm-belt-band { fill: #134e5e; fill-opacity: .56; stroke: #1d6a7a; stroke-opacity: .45; stroke-width: .09; vector-effect: non-scaling-stroke; }
+.chart-calm-belt { fill: none; stroke: rgba(29,106,122,.68); stroke-width: .18; stroke-dasharray: .7 .48; vector-effect: non-scaling-stroke; }
 .chart-grand-line { fill: none; stroke: rgba(245,196,81,.42); stroke-width: .24; vector-effect: non-scaling-stroke; }
 .chart-grand-line-core { fill: none; stroke: rgba(56,189,248,.48); stroke-width: .1; stroke-dasharray: .26 .44; vector-effect: non-scaling-stroke; }
 .chart-calm-label,.chart-blue-label,.chart-grand-label { font-family: var(--mono); letter-spacing: .11px; }
@@ -261,6 +262,26 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .chart-island .island-topography { fill: none; stroke: var(--island-detail); stroke-opacity: .58; stroke-width: .15; vector-effect: non-scaling-stroke; }
 .chart-island .island-topography.inner { fill: var(--island-detail); fill-opacity: .32; stroke: var(--island-detail); opacity: .86; }
 .chart-island .poneglyph-mark { fill: var(--beacon-color); stroke: #07090d; stroke-width: .13; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 1.2px var(--beacon-color)); }
+.voyage-route-base { fill: none; stroke: rgba(230,57,70,.46); stroke-width: 1.8; stroke-dasharray: 7 10; stroke-linecap: round; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 2px rgba(230,57,70,.2)); }
+.voyage-route-wake { fill: none; stroke: #f5c451; stroke-width: 1.65; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .9; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 2px rgba(245,196,81,.62)); }
+.voyage-fog { fill: #040b16; opacity: .76; pointer-events: none; }
+.going-merry { overflow: visible; filter: drop-shadow(0 2px 4px rgba(0,0,0,.82)) drop-shadow(0 0 3px rgba(245,196,81,.3)); }
+.merry-ripple { fill: none; stroke: rgba(56,189,248,.62); stroke-width: 1; vector-effect: non-scaling-stroke; animation: merry-ripple 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+.merry-hull { fill: #51331f; stroke: #f5c451; stroke-width: 1.2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.merry-hull-plank,.merry-keel { fill: none; stroke: #d4a373; stroke-width: .65; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.merry-mast { fill: none; stroke: #d4a373; stroke-width: 1.15; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.merry-sail { fill: #f3f0e8; fill-opacity: .97; stroke: #d7d0bf; stroke-width: .65; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.merry-sail-seam { fill: none; stroke: rgba(92,91,82,.65); stroke-width: .36; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.merry-flag { fill: #e63946; stroke: #f5c451; stroke-width: .55; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.merry-flag-mark { fill: none; stroke: #f2f0eb; stroke-width: .52; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.merry-deck { fill: none; stroke: #f5c451; stroke-width: .72; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.merry-wool { fill: #f5f4ed; stroke: #c6c3b9; stroke-width: .55; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.merry-ear { fill: none; stroke: #f5f4ed; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.merry-muzzle { fill: #f0c7a2; stroke: #9f735a; stroke-width: .35; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.merry-eye { fill: #171717; stroke: #fff; stroke-width: .14; vector-effect: non-scaling-stroke; }
+.merry-nose { fill: none; stroke: #6b3e33; stroke-width: .42; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+@keyframes merry-ripple { 0% { opacity: .68; transform: scale(.72,.74); } 75%,100% { opacity: 0; transform: scale(1.42,1.4); } }
+@media (prefers-reduced-motion: reduce) { .merry-ripple { animation: none; opacity: .42; } }
 .map-full-label { display: block; }
 .map-full-label path,.map-zoom-label path { fill: none; stroke: color-mix(in srgb, var(--beacon-color) 52%, transparent); stroke-width: .12; vector-effect: non-scaling-stroke; }
 .map-label-project { fill: var(--beacon-color); font: 1.02px var(--mono); letter-spacing: .06px; paint-order: stroke; stroke: #07090d; stroke-width: .32px; stroke-linejoin: round; }
@@ -280,15 +301,18 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
 .uncharted-island-name { fill: rgba(190,190,194,.62); font: .68px var(--mono); letter-spacing: .07px; }
 .chart-hotspots { z-index: 5; }
 .chart-hotspot.is-active { z-index: 2; }
+.chart-hotspot.is-locked { opacity: .28; filter: saturate(.36); transition: opacity .2s, filter .2s; }
+.chart-hotspot.is-locked:hover,.chart-hotspot.is-locked:focus-visible { opacity: .85; filter: saturate(.85); }
 .chart-hotspot::before { opacity: .24; animation: sonar-pulse 3s ease-out infinite; }
 .chart-hotspot.is-active::before { opacity: .8; animation-duration: 1.9s; }
 .chart-hotspot.is-active .chart-hotspot-tooltip { opacity: 0; }
 .chart-hotspot:hover .chart-hotspot-tooltip,.chart-hotspot:focus-visible .chart-hotspot-tooltip { opacity: 1; }
-.work-card { width: min(512px, 44vw); max-width: 512px; flex: 0 0 auto; margin: 0; position: relative; z-index: 10; background: #111; }
+.work-card { width: min(560px, 46vw); max-width: 560px; flex: 0 0 auto; margin: 0; position: relative; z-index: 10; background: #111; }
 .work-card-body { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); }
 .work-card-body>* { min-width: 0; }
 .work-visual { min-width: 0; min-height: 0; }
 .work-visual img { min-height: 0; }
+.work-content h3 { font-size: clamp(24px, 2.75vw, 34px); overflow-wrap: anywhere; }
 .work-index { z-index: 2; left: 3%; right: auto; }
 .chart-ui { z-index: 20; }
 .full-map-button[aria-pressed="true"] { color: var(--gold); border-color: rgba(245,196,81,.32); }
