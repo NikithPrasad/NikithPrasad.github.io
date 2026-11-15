@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import {
   ArrowDown, ArrowDownRight, ArrowRight, ArrowUpRight, BrainCircuit,
-  BriefcaseBusiness, Check, ChevronDown, Code2, Database, ExternalLink,
-  Github, Mail, Menu, MousePointer2, Radar, ScanLine, ShieldCheck,
+  BriefcaseBusiness, Check, ChevronDown, Code2, Database,
+  Github, Mail, Menu, MousePointer2, ScanLine,
   X,
 } from 'lucide-react'
+
+const PoneglyphScene = lazy(() => import('./PoneglyphScene.jsx'))
 
 const projects = [
   {
@@ -80,15 +82,32 @@ const navItems = [
 function useActiveSection() {
   const [active, setActive] = useState('work')
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-      if (visible) setActive(visible.target.id)
-    }, { rootMargin: '-25% 0px -60% 0px', threshold: [0, 0.15, 0.35] })
-    navItems.forEach(([id]) => {
-      const node = document.getElementById(id)
-      if (node) observer.observe(node)
-    })
-    return () => observer.disconnect()
+    const sections = navItems.map(([id]) => document.getElementById(id)).filter(Boolean)
+    let frame = 0
+    const update = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const atPageEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 3
+        if (atPageEnd) {
+          setActive(sections.at(-1)?.id || 'contact')
+          return
+        }
+        const readingLine = window.innerHeight * 0.34
+        let current = sections[0]
+        sections.forEach((section) => {
+          if (section.getBoundingClientRect().top <= readingLine) current = section
+        })
+        if (current) setActive(current.id)
+      })
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
   }, [])
   return active
 }
@@ -97,30 +116,15 @@ function Header() {
   const active = useActiveSection()
   const [open, setOpen] = useState(false)
   return (
-    <header className="site-header">
-      <a className="monogram" href="#top" aria-label="Nikith Prasad, back to top"><span>N</span><i>P</i><b /></a>
+    <header className="site-header" style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
+      <a className="monogram" href="#top" aria-label="Nikith Prasad, back to top" style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}><span>N</span><i>P</i><b /></a>
       <button className="mobile-menu" aria-label="Toggle navigation" onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button>
-      <nav className={`nav-pill ${open ? 'nav-open' : ''}`} aria-label="Main navigation">
+      <nav className={`nav-pill ${open ? 'nav-open' : ''}`} aria-label="Main navigation" style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
         {navItems.map(([id, label]) => <a key={id} className={active === id ? 'active' : ''} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>)}
         <a className="nav-resume" href="/resume.pdf" target="_blank" rel="noreferrer">RESUME <ArrowUpRight size={12} /></a>
       </nav>
     </header>
   )
-}
-
-function CompassMark({ color = '#f5c451' }) {
-  return <svg className="compass-mark" viewBox="0 0 220 220" aria-hidden="true">
-    <defs><radialGradient id="compassGlow"><stop stopColor={color} stopOpacity=".23"/><stop offset="1" stopColor={color} stopOpacity="0"/></radialGradient></defs>
-    <circle cx="110" cy="110" r="105" fill="url(#compassGlow)" />
-    <circle cx="110" cy="110" r="73" fill="none" stroke={color} strokeOpacity=".24" />
-    <circle cx="110" cy="110" r="56" fill="none" stroke={color} strokeOpacity=".12" strokeDasharray="2 6" />
-    <path d="M110 22v23M110 175v23M22 110h23M175 110h23M48 48l16 16m102 102 16 16m0-134-16 16M64 156l-16 16" stroke={color} strokeOpacity=".38" />
-    <path d="m110 70 13 40-13 40-13-40z" fill={color} fillOpacity=".76" />
-    <path d="m110 70 13 40-13-5z" fill="#e63946" />
-    <circle cx="110" cy="110" r="6" fill="#0a0a0a" stroke={color} strokeWidth="2" />
-    <text x="110" y="18" textAnchor="middle" fill={color} fillOpacity=".7" fontSize="9" fontFamily="monospace">N</text>
-    <text x="110" y="215" textAnchor="middle" fill={color} fillOpacity=".7" fontSize="9" fontFamily="monospace">S</text>
-  </svg>
 }
 
 function Hero() {
@@ -186,7 +190,7 @@ function MetricsStrip() {
     let frame; let start
     const tick = (time) => {
       if (!start) start = time
-      const next = Math.min((time - start) / 1150, 1)
+      const next = Math.min((time - start) / 900, 1)
       setProgress(1 - (1 - next) ** 3)
       if (next < 1) frame = requestAnimationFrame(tick)
     }
@@ -201,10 +205,6 @@ function MetricsStrip() {
     return value.toFixed(2)
   }
   return <div className="metrics-strip" ref={ref}>{metrics.map((item, i) => <div className="metric" key={item.label} style={{ '--delay': `${i * 90}ms` }}><strong className={seen ? 'metric-seen' : ''}>{formatted(item)}</strong><span>{item.label}</span></div>)}</div>
-}
-
-function ProjectGlyph({ color }) {
-  return <div className="glyph-wrap" aria-hidden="true"><CompassMark color={color} /><div className="glyph-coordinate">LOG POSE <span>01 / GRAND LINE</span></div></div>
 }
 
 function ProjectModal({ project, onClose }) {
@@ -237,9 +237,20 @@ function ProjectModal({ project, onClose }) {
 
 function WorkSection() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [sceneReady, setSceneReady] = useState(false)
   const [selected, setSelected] = useState(null)
   const markers = useRef([])
+  const stageRef = useRef(null)
   const active = projects[activeIndex]
+  useEffect(() => {
+    const preloaded = projects.map((project) => {
+      const image = new Image()
+      image.decoding = 'async'
+      image.src = project.image
+      return image
+    })
+    return () => preloaded.forEach((image) => { image.onload = null; image.onerror = null })
+  }, [])
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -249,25 +260,37 @@ function WorkSection() {
     markers.current.forEach((marker) => marker && observer.observe(marker))
     return () => observer.disconnect()
   }, [])
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return undefined
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setSceneReady(true)
+        observer.disconnect()
+      }
+    }, { rootMargin: '420px 0px' })
+    observer.observe(stage)
+    return () => observer.disconnect()
+  }, [])
   const goTo = (index) => markers.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   return <section id="work" className="work-section">
     <div className="section-shell work-intro"><div><div className="section-kicker"><span>01 / THE WORK</span><span className="kicker-line" /></div><h2>Six Poneglyphs.<br /><em>Six proofs of work.</em></h2></div><p>Each build is a coordinate: a problem understood, a system shaped, a result measured. Follow the trail.</p></div>
-    <div className="work-stage">
+    <div className="work-stage" ref={stageRef}>
       <div className="work-pinned">
-        <div className="work-card" key={active.id} style={{ '--project-accent': active.color }}>
+        {sceneReady && <Suspense fallback={<div className="poneglyph-scene scene-loading" aria-hidden="true" />}><PoneglyphScene activeIndex={activeIndex} /></Suspense>}
+        <div className="work-index" aria-hidden="true">{active.number}</div>
+        <div className="work-card" style={{ '--project-accent': active.color }}>
           <div className="work-card-top"><span>{active.number} <i /> SIX PROOFS</span><a href={active.repo} target="_blank" rel="noreferrer" aria-label={`Open ${active.name} on GitHub`}><ArrowUpRight size={18} /></a></div>
           <div className="work-card-body">
-            <div className="work-visual"><img src={active.image} alt={active.imageAlt} /><div className="visual-overlay" /><span className="visual-coordinate">FIG. {active.number} — FIELD RECORD</span></div>
-            <div className="work-content"><span className="project-type">{active.type}</span><h3>{active.name}<span>.</span></h3><p className="work-summary">{active.summary}</p>
+            <div className="work-visual">{projects.map((project, index) => <img className={`project-image-layer ${index === activeIndex ? 'is-active' : ''}`} key={project.id} src={project.image} alt={index === activeIndex ? project.imageAlt : ''} aria-hidden={index !== activeIndex} loading="eager" decoding="async" />)}<div className="visual-overlay" /><span className="visual-coordinate">FIG. {active.number} — FIELD RECORD</span></div>
+            <div className="work-content" key={active.id}><span className="project-type">{active.type}</span><h3>{active.name}<span>.</span></h3><p className="work-summary">{active.summary}</p>
               <div className="work-metrics">{active.metrics.slice(0, 3).map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div>
               <div className="work-card-bottom"><button className="details-button" onClick={() => setSelected(active)}>Details <ArrowUpRight size={14} /></button><span className="work-stack">{active.stack.slice(0, 3).join(' · ')}</span></div>
             </div>
           </div>
           <div className="work-card-base"><span>CHARTED IN HYDERABAD</span><span>GRAND LINE / {active.number}</span></div>
         </div>
-        <div className="work-glyph"><ProjectGlyph color={active.color} /></div>
         <div className="work-progress" aria-label="Project progress">{projects.map((project, index) => <button key={project.id} aria-label={`Go to ${project.name}`} aria-current={index === activeIndex ? 'step' : undefined} className={index === activeIndex ? 'current' : ''} style={{ '--node-color': project.color }} onClick={() => goTo(index)}><span>{project.number}</span></button>)}</div>
-        <div className="work-index" aria-hidden="true">{active.number}</div>
       </div>
       <div className="work-markers" aria-hidden="true">{projects.map((project, index) => <div className="work-marker" data-index={index} key={project.id} ref={(element) => { markers.current[index] = element }}><span>{project.number}</span><span>{project.name}</span><ChevronDown size={14} /></div>)}</div>
     </div>
@@ -280,21 +303,61 @@ function OceanCanvas() {
   useEffect(() => {
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
-    let width = 0; let height = 0; let frame = 0; let particles = []
+    let width = 0; let height = 0; let frame = 0; let particles = []; let lastTime = 0
     const resize = () => {
       const rect = canvas.getBoundingClientRect(); const dpr = Math.min(window.devicePixelRatio || 1, 2)
       width = rect.width; height = rect.height; canvas.width = width * dpr; canvas.height = height * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      particles = Array.from({ length: Math.max(30, Math.floor(width / 12)) }, (_, i) => ({ angle: (i / Math.max(30, Math.floor(width / 12))) * Math.PI * 2, radius: 30 + Math.random() * Math.max(width, height) * .62, speed: .00012 + Math.random() * .00028, size: Math.random() * 1.6 + .25, alpha: Math.random() * .3 + .07 }))
+      particles = Array.from({ length: Math.max(140, Math.min(320, Math.floor(width / 4))) }, () => ({
+        angle: Math.random() * Math.PI * 2,
+        depth: Math.random(),
+        speed: .1 + Math.random() * .24,
+        spin: (Math.random() - .5) * .07,
+        size: .35 + Math.random() * 1.15,
+        gold: Math.random() > .55,
+      }))
     }
-    const draw = () => {
+    const draw = (time = 0) => {
+      const delta = lastTime ? Math.min((time - lastTime) / 1000, .05) : 0
+      lastTime = time
       ctx.clearRect(0, 0, width, height)
       const cx = width * .52; const cy = height * .5
+      const radius = Math.hypot(width, height) * .62
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * .8)
+      glow.addColorStop(0, 'rgba(56,189,248,.055)')
+      glow.addColorStop(.45, 'rgba(245,196,81,.018)')
+      glow.addColorStop(1, 'rgba(0,0,0,0)')
+      ctx.fillStyle = glow
+      ctx.fillRect(0, 0, width, height)
+      ctx.globalCompositeOperation = 'lighter'
       particles.forEach((p) => {
-        p.angle += p.speed
-        const x = cx + Math.cos(p.angle) * p.radius
-        const y = cy + Math.sin(p.angle) * p.radius * .42
-        ctx.beginPath(); ctx.arc(x, y, p.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(56,189,248,${p.alpha})`; ctx.fill()
+        p.depth += delta * p.speed
+        p.angle += delta * p.spin
+        if (p.depth >= 1) {
+          p.depth = .018 + Math.random() * .08
+          p.angle = Math.random() * Math.PI * 2
+          p.gold = Math.random() > .55
+        }
+        const tail = Math.max(.01, p.depth - (.02 + p.depth * .055))
+        const headRadius = p.depth * radius
+        const tailRadius = tail * radius
+        const x = cx + Math.cos(p.angle) * headRadius
+        const y = cy + Math.sin(p.angle) * headRadius * .58
+        const tx = cx + Math.cos(p.angle) * tailRadius
+        const ty = cy + Math.sin(p.angle) * tailRadius * .58
+        const alpha = .04 + p.depth * p.depth * .24
+        const tint = p.gold ? '245,196,81' : '56,189,248'
+        ctx.beginPath()
+        ctx.moveTo(tx, ty)
+        ctx.lineTo(x, y)
+        ctx.strokeStyle = `rgba(${tint},${alpha})`
+        ctx.lineWidth = p.size * (.3 + p.depth)
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.arc(x, y, p.size * (.35 + p.depth * .55), 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${tint},${Math.min(alpha * 1.8, .42)})`
+        ctx.fill()
       })
+      ctx.globalCompositeOperation = 'source-over'
       frame = requestAnimationFrame(draw)
     }
     resize(); draw(); window.addEventListener('resize', resize)

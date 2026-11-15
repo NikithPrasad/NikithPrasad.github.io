@@ -1,6 +1,6 @@
 # Nikith Prasad — Developer Portfolio
 
-React, Vite, and Tailwind CSS portfolio for [NikithPrasad.github.io](https://nikithprasad.github.io/), with a quiet One Piece / Grand Line visual language and six project case studies.
+React, Vite, Tailwind CSS, and Three.js portfolio for [NikithPrasad.github.io](https://nikithprasad.github.io/), with a quiet One Piece / Grand Line visual language, a scroll-morphed WebGL Poneglyph, and six project case studies.
 
 ## Run locally
 
@@ -16,7 +16,7 @@ Build the production site with `npm run build`. The GitHub Actions workflow buil
 ```mermaid
 flowchart LR
   A[React portfolio] --> B[Project case studies]
-  A --> C[Canvas and scroll interactions]
+  A --> C[Three.js WebGL Poneglyph + journey canvas]
   B --> D[Six project demo assets]
   A --> E[Resume PDF]
   F[GitHub Actions] --> G[Vite production build]

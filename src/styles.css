@@ -124,3 +124,54 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .ocean-canvas { display: none; }
 }
+
+/* Showcase and scroll polish */
+.site-header {
+  padding: 5px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 999px;
+  background: rgba(8,8,9,.76);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 34px rgba(0,0,0,.3);
+  isolation: isolate;
+}
+.monogram { position: relative; z-index: 1; background: rgba(18,16,12,.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.nav-pill { background: rgba(12,12,13,.82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.metric strong { opacity: 1; transform: none; }
+.metric strong.metric-seen { opacity: 1; transform: none; }
+.work-pinned { isolation: isolate; }
+.work-pinned::before { z-index: 1; }
+.poneglyph-scene { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+.poneglyph-scene.scene-loading::after { content: ''; position: absolute; width: min(38vw, 430px); aspect-ratio: 1; right: 7%; top: 50%; transform: translateY(-50%); border: 1px solid rgba(245,196,81,.12); border-radius: 50%; background: radial-gradient(circle, rgba(56,189,248,.035), transparent 60%); }
+.poneglyph-webgl { display: block; width: 100%; height: 100%; }
+.work-index { z-index: 2; pointer-events: none; }
+.work-card { z-index: 10; background: #111; }
+.work-progress { z-index: 20; }
+.work-visual { isolation: isolate; }
+.work-visual img.project-image-layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.045);
+  transition: opacity .58s ease, transform .9s cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+.work-visual img.project-image-layer.is-active { opacity: .82; transform: scale(1); }
+.work-content { animation: project-copy-in .34s ease both; }
+@keyframes project-copy-in { from { opacity: .65; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+.modal-backdrop { z-index: 50; }
+.experience-section { min-height: 100svh; overflow: clip; }
+.ocean-canvas { position: sticky; z-index: 0; top: 0; height: 100svh; margin-bottom: -100svh; pointer-events: none; }
+.experience-content { z-index: 1; }
+@media (max-width: 700px) {
+  .experience-section { min-height: 100svh; }
+  .experience-content { padding-bottom: 38px; }
+  .timeline-card { margin-top: 29px; padding-block: 17px; }
+  .timeline-note { margin-top: 17px; }
+}
